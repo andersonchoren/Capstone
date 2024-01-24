@@ -2,7 +2,7 @@
 
 $servername = "localhost"; // XAMPP default
 $dbUsername = "root"; // XAMPP default username
-$dbPassword = "12345678"; // XAMPP default password is blank
+$dbPassword = ""; // XAMPP default password is blank
 $dbname = "ExcelDrivingSchool"; // Your database name
 
 // Create connection
