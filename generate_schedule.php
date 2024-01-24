@@ -28,6 +28,5 @@ foreach ($days as $day) {
         }
     }
 }
-
 $conn->close();
 

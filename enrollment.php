@@ -47,7 +47,7 @@ die("Connection failed: " . $conn->connect_error);
 
 <section class="enrollment-section">
   <h2>Course Enrollment</h2>
-  <form action="enrollment.php" method="post">
+  <form action="" method="post">
 
     <!-- Branch Selection -->
     <label for="branch">Branch:</label>
@@ -69,11 +69,11 @@ die("Connection failed: " . $conn->connect_error);
     <label for="vehicle">Select Vehicle:</label>
     <select id="vehicle" name="vehicle">
       <?php
-            $vehicleSql = "SELECT VehicleID, Model FROM Fleet";
+            $vehicleSql = "SELECT VehicleID, VehicleType , Model FROM Fleet";
             $vehicleResult = $conn->query($vehicleSql);
       if ($vehicleResult && $vehicleResult->num_rows > 0) {
       while ($row = $vehicleResult->fetch_assoc()) {
-      echo "<option value='" . $row["VehicleID"] . "'>" . htmlspecialchars($row["Model"]) . "</option>";
+      echo "<option value='" . $row["VehicleID"] . "'>" . htmlspecialchars($row["Model"]) ."-" .htmlspecialchars($row["VehicleType"])."</option>";
       }
       } else {
       echo "<option value=''>No vehicles available</option>";
