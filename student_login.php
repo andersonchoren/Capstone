@@ -14,21 +14,21 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
     $result = $stmt->get_result();
 
     if ($row = $result->fetch_assoc()) {
-        if (password_verify($password, $row['password'])) {
+                if (password_verify($password, $row['Password'])) {
             // Login successful, set session variables
             $_SESSION['user_id'] = $row['StudentID'];
-            $_SESSION['username'] = $row['username'];
+            $_SESSION['Username'] = $row['Username'];
 
             // Redirect to another page
-            header("Location: dashboard.php"); // Replace 'dashboard.php' with the actual page
+            header("Location: student-area.html"); // Replace 'dashboard.php' with the actual page
             exit;
         } else {
             // Invalid password
-            echo "Invalid username or password";
+            echo "Invalid password";
         }
     } else {
         // Username not found
-        echo "Invalid username or password";
+        echo "Invalid username";
     }
 
     $stmt->close();
