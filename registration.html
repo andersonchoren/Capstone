@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,7 +7,6 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
 <header>
     <div class="logo">
         <img src="logo.JPEG" alt="Excel Driving School Logo">
@@ -16,7 +14,6 @@
     </div>
     <p>Your Journey Begins Here</p>
 </header>
-
 <nav>
     <ul>
         <li><a href="index.html">Home</a></li>
@@ -28,36 +25,27 @@
         <li><a href="students-login.html">Students Login</a></li>
     </ul>
 </nav>
-
 <div class="container1">
     <form id="registerForm" action="register.php" method="post">
         <h2>Student Registration</h2>
         <label for="firstName">First Name:</label>
         <input type="text" id="firstName" name="firstname" placeholder="Enter your first name" required>
-
-
         <label for="lastName">Last Name:</label>
         <input type="text" id="lastName" name="lastname" placeholder="Enter your last name" required>
-
         <label for="gender">Gender:</label>
         <select id="gender" name="gender" required>
             <option value="male">Male</option>
             <option value="female">Female</option>
             <option value="other">Other</option>
         </select>
-
         <label for="address">Address:</label>
         <textarea id="address" name="address" placeholder="Enter your address"></textarea>
-
         <label for="Email">Email:</label>
         <input type="email" id="Email" name="email" placeholder="Enter your email" required>
-
         <label for="mobile">Mobile Number:</label>
         <input type="tel" id="mobile" name="contactinfo" placeholder="Enter your mobile number" required>
-
         <label for="dob">Date of Birth:</label>
         <input type="date" id="dob" name="dob" required>
-
         <label for="interest">I'm interested in:</label>
         <select name="interest" id="interest" required>
             <option value="" disabled selected>Select an option</option>
@@ -69,27 +57,20 @@
         </select>
         <label for="username">Create Username:</label>
         <input type="text" id="username" name="username" required>
-
         <label for="password">Create Password:</label>
         <input type="password" id="password" name="password" required>
-
         <label for="message">Short Message:</label>
         <textarea id="message" name="message" placeholder="Enter a short message"></textarea>
-
         <label>
             <input type="checkbox" name="terms" required> I agree to the terms and conditions.
         </label>
-
         <button type="submit">Submit</button>
     </form>
 </div>
-
-
 <footer>
     <p>&copy; 2024 Excel Driving School. All rights reserved.
         <a href="mailto:services@exceldriving.com">exceldriving@syd.com.au</a>
     </p>
 </footer>
-
 </body>
 </html>
