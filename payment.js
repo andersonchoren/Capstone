@@ -1,12 +1,7 @@
 
-
-
 function stripeTokenHandler(token) {
     // Send token to your server for processing
-    fetch('/charge', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
+    fetch('/charge', {method: 'POST', headers: {'Content-Type': 'application/json',
         },
         body: JSON.stringify({ token: token }),
     })
