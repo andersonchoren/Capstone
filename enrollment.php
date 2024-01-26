@@ -36,7 +36,7 @@ if ($conn->connect_error) {
 
 <header>
     <div class="logo">
-        <img src="logo.JPEG" alt="Excel Driving School Logo">
+        <img src="image/logo.JPEG" alt="Excel Driving School Logo">
         <h1>Excel Driving School</h1>
     </div>
     <p>Your Journey Begins Here</p>

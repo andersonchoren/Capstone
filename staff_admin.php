@@ -78,7 +78,7 @@ $conn->close();
 <body>
 <header>
     <div class="logo">
-        <img src="logo.JPEG" alt="Excel Driving School Logo">
+        <img src="image/logo.JPEG" alt="Excel Driving School Logo">
         <h1>Excel Driving School</h1>
     </div>
     <p>Welcome, <?php echo $_SESSION['username']; ?>!</p>
@@ -91,7 +91,7 @@ $conn->close();
         <li><a href="#reminders">Reminders</a></li>
         <li><a href="#invoices">Invoices</a></li>
         <li><a href="#payments">Payments</a></li>
-        <li><a href="logout.php">Logout</a></li>
+
     </ul>
 </nav>
 
