@@ -545,5 +545,31 @@ textarea {
             width: 75%;
             height: 75%;
         }
-		
-		
+
+.driving-course-section {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    padding: 20px 0;
+}
+
+.course {
+    flex-basis: calc(50% - 20px); /* Adjust width of each course box */
+    margin: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Optional */
+    padding: 15px;
+    background-color: #fff; /* Add background color */
+    border-radius: 8px; /* Rounded corners */
+}
+
+.course img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Responsive Layout for smaller screens */
+@media screen and (max-width: 768px) {
+    .course {
+        flex-basis: 100%;
+    }
+}
