@@ -6,7 +6,7 @@ body {
 
 header {
     background-color: White;
-    color: Dark blue;
+    color: black;
     text-align: center;
     padding: 10px;
 
@@ -86,9 +86,9 @@ button:hover {
     background-color: #45a049;
 }
 
-a {
+  {
     text-decoration: none;
-    color: #4caf50;
+    color:#4caf50;
 }
 
 
@@ -155,19 +155,6 @@ textarea {
     margin: auto;
     overflow: hidden;
     border: 5px solid #4CAF50; /* Green border */
-}
-
-
-
-/* Hero Section Styles */
-.hero {
-    position: relative;
-    height: 100vh;
-    background: url('image1.jpg') center/cover no-repeat;
-    color: #fff;
-    display: flex;
-    align-items: center;
-    text-align: center;
 }
 
 .overlay {
@@ -480,7 +467,6 @@ body {
 
 .contact-form button:hover {
     background-color: #555;
-}
 
 <style>
  body {
@@ -569,8 +555,10 @@ h2 {
 
 /* Responsive Layout for smaller screens */
 @media screen and (max-width: 768px) {
+
+}
     .course {
         flex-basis: 100%;
     }
-}
 
+}
