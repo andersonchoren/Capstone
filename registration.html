@@ -5,6 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Excel Driving School - Student Registration</title>
     <link rel="stylesheet" href="style.css">
+    <script>
+        function validateAge() {
+            var dob = new Date(document.getElementById('dob').value);
+            var today = new Date();
+            var age = today.getFullYear() - dob.getFullYear();
+            var m = today.getMonth() - dob.getMonth();
+            if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) {
+                age--;
+            }
+
+            if (age < 16) {
+                alert("You must be at least 16 years old to enroll.");
+                return false;
+            }
+            return true;
+        }
+    </script>
 </head>
 <body>
 <header>
@@ -26,7 +43,7 @@
     </ul>
 </nav>
 <div class="container1">
-    <form id="registerForm" action="register.php" method="post">
+    <form id="registerForm" action="register.php" method="post"onsubmit="return validateAge()">
         <h2>Student Registration</h2>
         <label for="firstName">First Name:</label>
         <input type="text" id="firstName" name="firstname" placeholder="Enter your first name" required>
