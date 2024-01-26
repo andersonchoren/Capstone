@@ -88,11 +88,11 @@ if ($conn->connect_error) {
         <label for="course">Course:</label>
         <select id="course" name="course">
             <?php
-            $courseSql = "SELECT CourseID, CourseName FROM Courses";
+            $courseSql = "SELECT CourseID, CourseName, Price, NumberOfClasses FROM Courses";
             $courseResult = $conn->query($courseSql);
             if ($courseResult && $courseResult->num_rows > 0) {
                 while ($row = $courseResult->fetch_assoc()) {
-                    echo "<option value='" . $row["CourseID"] . "'>" . htmlspecialchars($row["CourseName"]) . "</option>";
+                    echo "<option value='" . $row["CourseID"] . "'>" . htmlspecialchars($row["CourseName"]) . " - Price: " . $row["Price"] . " - Number of Classes: " . $row["NumberOfClasses"] . "</option>";
                 }
             } else {
                 echo "<option value=''>No courses found.</option>";
@@ -115,9 +115,33 @@ if ($conn->connect_error) {
                 echo "<option value=''>No schedules found.</option>";
             }
             ?>
+
         </select>
 
-        <button type="submit" class="enroll-button">Enroll Now</button>
+        <label for="instructor">Instructor:</label>
+        <select id="instructor" name="instructor">
+            <?php
+            $instructorSql = "SELECT InstructorID, Firstname, Lastname, Description FROM Instructors";
+            $instructorResult = $conn->query($instructorSql);
+            if ($instructorResult && $instructorResult->num_rows > 0) {
+                while ($row = $instructorResult->fetch_assoc()) {
+                    $instructorInfo = $row["Firstname"] . " " . $row["Lastname"] . " - " . $row["Description"];
+                    echo "<option value='" . $row["InstructorID"] . "'>" . htmlspecialchars($instructorInfo) . "</option>";
+                }
+            } else {
+                echo "<option value=''>No instructors found.</option>";
+            }
+            ?>
+            <select></select>
+            <button type="submit" class="enroll-button">Enroll Now</button>
+
+            <script>
+                document.querySelector(".enroll-button").addEventListener("click", function(e) {
+                    e.preventDefault(); // Prevent the form from being submitted
+                    window.location.href = "payment.php";
+                });
+            </script>
+        </select>
     </form>
 </section>
 
