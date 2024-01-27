@@ -50,7 +50,7 @@ if ($conn->connect_error) {
 
 <section class="enrollment-section">
     <h2>Course Enrollment</h2>
-    <form action="" method="post">
+    <form action="payment.php" method="post">
 
         <!-- Branch Selection -->
         <label for="branch">Branch:</label>
@@ -138,7 +138,7 @@ if ($conn->connect_error) {
             <script>
                 document.querySelector(".enroll-button").addEventListener("click", function(e) {
                     e.preventDefault(); // Prevent the form from being submitted
-                    window.location.href = "booking.php";
+                    window.location.href = "payment.php";
                 });
             </script>
         </select>

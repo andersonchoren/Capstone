@@ -1,3 +1,47 @@
+<?php
+session_start();
+require_once "connect.php";
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Retrieve form data
+    $studentId = $_SESSION['user_id']; // Assuming the student's ID is stored in the session
+    $branchId = $_POST['branch'];
+    $vehicleId = $_POST['vehicle'];
+    $courseId = $_POST['course'];
+    $scheduleId = $_POST['schedule'];
+    $instructorId = $_POST['instructor'];
+
+    $bookingDate = date("Y-m-d"); // Current date for the booking
+    $status = "Pending"; // Default status
+    $paymentConfirmed = 0; // Default to 0 (not confirmed)
+
+    // Prepare an insert statement for the Bookings table
+    $sql = "INSERT INTO Bookings (StudentID, BranchID, VehicleID, CourseID, ScheduleID, InstructorID, BookingDate, Status, PaymentConfirmed) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+    if ($stmt = $conn->prepare($sql)) {
+        $stmt->bind_param("iiiiisssi", $studentId, $branchId, $vehicleId, $courseId, $scheduleId, $instructorId, $bookingDate, $status, $paymentConfirmed);
+
+        if ($stmt->execute()) {
+            // Store the last inserted booking ID in the session for later retrieval
+            $_SESSION['lastBookingId'] = $conn->insert_id;
+
+            // Redirect to the next page (e.g., booking_details.php or another page)
+            header("Location: booking_details.php");
+            exit;
+        } else {
+            echo "Error: " . $stmt->error;
+        }
+        $stmt->close();
+    } else {
+        echo "Error preparing statement: " . $conn->error;
+    }
+    $conn->close();
+} else {
+    echo "Form not submitted properly.";
+}
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,6 +64,11 @@
     </ul>
 </nav>
 <h1>Payment Form</h1>
+
+<!-- Show error message if there is one -->
+<?php if (!empty($error_message)) { ?>
+    <p class="error"><?php echo $error_message; ?></p>
+<?php } ?>
 
 <form id="payment-form" action="payment.php" method="POST">
     <!-- Choose Payment Method -->
@@ -67,6 +116,7 @@
 </footer>
 
 <script>
+    // JavaScript to handle display of payment method details
     document.querySelectorAll('input[name="payment_method"]').forEach(input => {
         input.addEventListener('change', function() {
             document.getElementById('credit_card_details').style.display = this.value === 'Credit Card' ? 'block' : 'none';
@@ -75,33 +125,5 @@
         });
     });
 </script>
-<?php
-// payment.php
-session_start();
-require_once "connect.php"; // Database connection
-
-// Simulate payment processing here
-$paymentSuccess = true; // This should be replaced with actual payment logic
-
-if ($paymentSuccess) {
-    $bookingId = $_SESSION['lastBookingId'];
-    $sql = "UPDATE Bookings SET PaymentConfirmed = 1 WHERE BookingID = ?";
-
-    if ($stmt = $conn->prepare($sql)) {
-        $stmt->bind_param("i", $bookingId);
-        if ($stmt->execute()) {
-            header("Location: booking_details.php"); // Redirect to booking details page
-            exit;
-        } else {
-            echo "Error: " . $stmt->error;
-        }
-        $stmt->close();
-    } else {
-        echo "Error preparing statement: " . $conn->error;
-    }
-    $conn->close();
-}
-?>
-
 </body>
 </html>
