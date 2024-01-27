@@ -41,7 +41,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 ?>
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -84,7 +83,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <input type="radio" id="afterpay" name="payment_method" value="Afterpay">
         <label for="afterpay">Afterpay</label>
     </div>
-
     <!-- Credit Card Details -->
     <div id="credit_card_details">
         <label for="card-number">Card Number:</label>
@@ -95,8 +93,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         <label for="card-cvc">CVC:</label>
         <input type="text" id="card-cvc" name="card-cvc">
-    </div>
 
+    </div>
     <!-- PayPal Email -->
     <div id="paypal_details" style="display: none;">
         <label for="paypal_email">PayPal Email:</label>
@@ -106,8 +104,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <!-- Afterpay Details -->
     <div id="afterpay_details" style="display: none;">
         <p>Afterpay will be processed on the next page.</p>
-    </div>
 
+    </div>
     <button type="submit">Pay Now</button>
 </form>
 
