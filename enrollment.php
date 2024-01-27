@@ -104,11 +104,11 @@ if ($conn->connect_error) {
         <label for="schedule">Schedule:</label>
         <select id="schedule" name="schedule">
             <?php
-            $scheduleSql = "SELECT ScheduleID, Day, StartTime, EndTime FROM ClassSchedules";
+            $scheduleSql = "SELECT ScheduleID, Day, StartTime, EndTime, ClassDate FROM ClassSchedules";
             $scheduleResult = $conn->query($scheduleSql);
             if ($scheduleResult && $scheduleResult->num_rows > 0) {
                 while ($row = $scheduleResult->fetch_assoc()) {
-                    $scheduleInfo = $row["Day"] . " " . $row["StartTime"] . " - " . $row["EndTime"];
+                    $scheduleInfo = $row["EndTime"] . " " . $row["StartTime"] . " - " . $row["Day"] ." - ". $row["ClassDate"];
                     echo "<option value='" . $row["ScheduleID"] . "'>" . htmlspecialchars($scheduleInfo) . "</option>";
                 }
             } else {
