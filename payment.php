@@ -25,9 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Store the last inserted booking ID in the session for later retrieval
             $_SESSION['lastBookingId'] = $conn->insert_id;
 
-            // Redirect to the next page (e.g., booking_details.php or another page)
-            header("Location: booking_details.php");
-            exit;
+
         } else {
             echo "Error: " . $stmt->error;
         }
@@ -69,7 +67,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <p class="error"><?php echo $error_message; ?></p>
 <?php } ?>
 
-<form id="payment-form" action="payment.php" method="POST">
+<form id="payment-form" action="invoice.php" method="POST">
     <!-- Choose Payment Method -->
     <div>
         <input type="radio" id="credit_card" name="payment_method" value="Credit Card" checked>

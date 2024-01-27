@@ -135,12 +135,6 @@ if ($conn->connect_error) {
             <select></select>
             <button type="submit" class="enroll-button">Enroll Now</button>
 
-            <script>
-                document.querySelector(".enroll-button").addEventListener("click", function(e) {
-                    e.preventDefault(); // Prevent the form from being submitted
-                    window.location.href = "payment.php";
-                });
-            </script>
         </select>
     </form>
 </section>
