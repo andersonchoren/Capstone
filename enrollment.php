@@ -138,7 +138,7 @@ if ($conn->connect_error) {
             <script>
                 document.querySelector(".enroll-button").addEventListener("click", function(e) {
                     e.preventDefault(); // Prevent the form from being submitted
-                    window.location.href = "payment.php";
+                    window.location.href = "booking.php";
                 });
             </script>
         </select>

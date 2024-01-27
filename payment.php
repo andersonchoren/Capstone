@@ -76,29 +76,32 @@
     });
 </script>
 <?php
-require_once "connect.php";
+// payment.php
+session_start();
+require_once "connect.php"; // Database connection
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Get the form data
-    $paymentMethod = $_POST['payment_method'];
-    // Additional fields based on payment method
-    // ...
+// Simulate payment processing here
+$paymentSuccess = true; // This should be replaced with actual payment logic
 
-    // Process the payment
-    // Add your payment processing logic here
+if ($paymentSuccess) {
+    $bookingId = $_SESSION['lastBookingId'];
+    $sql = "UPDATE Bookings SET PaymentConfirmed = 1 WHERE BookingID = ?";
 
-    // Generate the invoice
-    $invoiceNumber = uniqid();
-    $amount = 99.99; // Change this to the actual payment amount
-    $customerName = "John Doe"; // Change this to the actual customer name
-
-    // Print the invoice
-    echo "Invoice Number: " . $invoiceNumber . "<br>";
-    echo "Amount: $" . $amount . "<br>";
-    echo "Customer Name: " . $customerName . "<br>";
-    // Additional details based on payment method
-    // ...
+    if ($stmt = $conn->prepare($sql)) {
+        $stmt->bind_param("i", $bookingId);
+        if ($stmt->execute()) {
+            header("Location: booking_details.php"); // Redirect to booking details page
+            exit;
+        } else {
+            echo "Error: " . $stmt->error;
+        }
+        $stmt->close();
+    } else {
+        echo "Error preparing statement: " . $conn->error;
+    }
+    $conn->close();
 }
 ?>
+
 </body>
 </html>
