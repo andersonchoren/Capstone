@@ -5,23 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Excel Driving School</title>
     <link rel="stylesheet" href="style.css">
-	
+    <!-- Lightbox CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css">
 </head>
 <body>
 
-    <header>
-	<div class="logo">
-            <img src="image/logo.JPEG" alt="Excel Driving School Logo">
-            <h1>Excel Driving School</h1>
-        </div>
-        
-        <p>Your Journey Begins Here</p>
-    </header>
-	 
+<header>
+    <div class="logo">
+        <img src="image/logo.JPEG" alt="Excel Driving School Logo">
+        <h1>Excel Driving School</h1>
+    </div>
+    <p>Your Journey Begins Here</p>
+</header>
 
-	<nav>
+<nav>
     <ul>
-        <li><a href="media.html">Media</a></li>
         <li><a href="javascript:if (window.history.length > 1) { window.history.back(); } else { window.location.href = 'index.html'; }">Back to Previous Page</a></li>
     </ul>
 </nav>
@@ -31,24 +29,22 @@
     <p>Welcome to our media section where you can explore our visual content.</p>
 
     <div class="image-gallery">
-        <img src="image/img1.jpg" alt="Image 1">
-        <img src="image/img2.webp" alt="Image 2">
+        <a href="image/img1.jpg" data-lightbox="gallery" data-title="Image 1"><img src="image/img1.jpg" alt="Image 1"></a>
+        <a href="image/img2.webp" data-lightbox="gallery" data-title="Image 2"><img src="image/img2.webp" alt="Image 2"></a>
+    </div>
 
     <div class="video-gallery">
         <iframe width="560" height="315" src="https://www.youtube.com/embed/fVl88Q5DJ2w?si=kOCo5YB0tAv-zd-_" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
     </div>
 </div>
-    
 
-    <footer>
-        <p>&copy; 2024 Excel Driving School. All rights reserved.
-		<a href="mailto:services@exceldriving.com">exceldriving@syd.com.au</a>
-		</p>
-		
-		
-    </footer>
-	
-	
+<footer>
+    <p>2024 Excel Driving School. All rights reserved.
+        <a href="mailto:services@exceldriving.com">exceldriving@syd.com.au</a>
+    </p>
+</footer>
 
+<!-- Lightbox JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox-plus-jquery.min.js"></script>
 </body>
 </html>
