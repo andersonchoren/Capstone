@@ -70,7 +70,7 @@ if (isset($_SESSION['lastBookingId'])) {
 </section>
 
 <footer>
-    <p>&copy; 2024 Excel Driving School. All rights reserved.
+    <p> 2024 Excel Driving School. All rights reserved.
         <a href="mailto:services@exceldriving.com">exceldriving@syd.com.au</a>
     </p>
 </footer>
