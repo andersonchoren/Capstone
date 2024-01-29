@@ -56,7 +56,7 @@ if ($conn->connect_error) {
         <label for="branch">Branch:</label>
         <select id="branch" name="branch">
             <?php
-            $branchSql = "SELECT BranchName FROM Branches";
+            $branchSql = "SELECT BranchID, BranchName FROM Branches";
             $branchResult = $conn->query($branchSql);
             if ($branchResult && $branchResult->num_rows > 0) {
                 while ($row = $branchResult->fetch_assoc()) {
@@ -125,7 +125,7 @@ if ($conn->connect_error) {
             $instructorResult = $conn->query($instructorSql);
             if ($instructorResult && $instructorResult->num_rows > 0) {
                 while ($row = $instructorResult->fetch_assoc()) {
-                    $instructorInfo = $row["FirstName"] . " " . $row["LastName"] . " - " . $row["Description"];
+                    $instructorInfo = $row["Firstname"] . " " . $row["Lastname"] . " - " . $row["Description"];
                     echo "<option value='" . $row["InstructorID"] . "'>" . htmlspecialchars($instructorInfo) . "</option>";
                 }
             } else {
