@@ -1,49 +1,58 @@
 <?php
 require_once "connect.php";
 
+// Start session
 session_start();
 
-// Check if the user is already logged in
-if (isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] === true) {
-    header("Location: index.php"); // Redirect to the staff administration area
-    exit;
-}
+// Include your database connection here
+// require 'db_connection.php';
 
-// Check if the login form is submitted
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+$error_message = '';
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = $_POST['username'];
     $password = $_POST['password'];
 
-    // Perform the login authentication here using your authentication logic
-
-       // Assuming the login is successful, set the session variables
-    $_SESSION['loggedIn'] = true;
-    $_SESSION['username'] = $username;
-
-    header("Location: index.php"); // Redirect to the staff administration area
-    exit;
+    // Validate login credentials
+    // You should retrieve user data from the database and verify the password
+    // This is just a placeholder logic
+    if ($username == 'admin' && $password == 'password') {
+        $_SESSION['user_id'] = 1; // Example user ID
+        $_SESSION['username'] = $username;
+        $_SESSION['is_admin'] = true;
+        header('Location: index.php');
+        exit();
+    } else {
+        $error_message = 'Invalid Username or Password!';
+    }
 }
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <!-- ... head elements ... -->
+    <title>Login - Admin</title>
 </head>
 <body>
-<h1>Login</h1>
-<form action="login.php" method="POST">
-    <label for="username">Username:</label>
-    <input type="text" id="username" name="username" required><br>
-
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="password" required><br>
-
-    <input type="submit" value="Login">
-</form>
+    <form method="post" action="login.php">
+        <h2>Admin Login</h2>
+        <p>
+            <label for="username">Username:</label>
+            <input type="text" name="username" id="username" required>
+        </p>
+        <p>
+            <label for="password">Password:</label>
+            <input type="password" name="password" id="password" required>
+        </p>
+        <p>
+            <input type="submit" value="Login">
+        </p>
+        <?php
+        if ($error_message != '') {
+            echo '<p>' . $error_message . '</p>';
+        }
+        ?>
+    </form>
 </body>
 </html>
-
-
