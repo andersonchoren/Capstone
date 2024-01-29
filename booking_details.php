@@ -13,7 +13,7 @@ if (isset($_SESSION['lastBookingId'])) {
             if ($row = $result->fetch_assoc()) {
                 // Prepare variables from the row for display (ensure to escape output)
                 $bookingId = htmlspecialchars($row['BookingID']);
-                $studentId = htmlspecialchars($row['StudentID']);
+                $studentId = htmlspecialchars($row['studentID']);
                 // ... Other variables ...
                 $bookingDate = htmlspecialchars($row['BookingDate']);
                 $status = htmlspecialchars($row['Status']);
@@ -62,8 +62,8 @@ if (isset($_SESSION['lastBookingId'])) {
     <?php if (isset($error_message)): ?>
         <p class="error"><?php echo $error_message; ?></p>
     <?php else: ?>
-        <p>Booking ID: <?php echo $bookingId; ?></p>
-        <p>Student ID: <?php echo $studentId; ?></p>
+        <p>Booking : <?php echo $bookingId; ?></p>
+        <p>Student : <?php echo $studentId; ?></p>
         <!-- ... Other details ... -->
         <p>Booking Date: <?php echo $bookingDate; ?></p>
         <p>Status: <?php echo $status; ?></p>
