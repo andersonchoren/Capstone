@@ -52,7 +52,9 @@ if (isset($_SESSION['lastBookingId'])) {
 </header>
 
 <nav>
-    <!-- Navigation content (if any) -->
+    <<ul>
+        <li><a href="javascript:if (window.history.length > 1) { window.history.back(); } else { window.location.href = 'index.html'; }">Back to Previous Page</a></li>
+    </ul>
 </nav>
 
 <section class="booking-details-section">

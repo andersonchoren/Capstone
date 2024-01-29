@@ -103,22 +103,47 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <p>Afterpay will be processed on the next page.</p>
 
     </div>
-    <button type="submit">Pay Now</button>
-</form>
+    <button type="submit" name="submit_payment">Pay Now</button>
 
 <footer>
-    <p>&copy; 2024 Excel Driving School. All rights reserved. <a href="mailto:services@exceldriving.com">exceldriving@syd.com.au</a></p>
+    <p> 2024 Excel Driving School. All rights reserved. <a href="mailto:services@exceldriving.com">exceldriving@syd.com.au</a></p>
 </footer>
 
-<script>
-    // JavaScript to handle display of payment method details
-    document.querySelectorAll('input[name="payment_method"]').forEach(input => {
-        input.addEventListener('change', function() {
-            document.getElementById('credit_card_details').style.display = this.value === 'Credit Card' ? 'block' : 'none';
-            document.getElementById('paypal_details').style.display = this.value === 'PayPal' ? 'block' : 'none';
-            document.getElementById('afterpay_details').style.display = this.value === 'Afterpay' ? 'block' : 'none';
+    <script>
+        // JavaScript to handle display and validation of payment method details
+        document.getElementById('payment-form').addEventListener('submit', function(e) {
+            const selectedPaymentMethod = document.querySelector('input[name="payment_method"]:checked').value;
+            let isValid = true;
+
+            // Validate Credit Card Details
+            if (selectedPaymentMethod === 'Credit Card') {
+                if (!document.getElementById('card-number').value || !document.getElementById('card-expiration-date').value || !document.getElementById('card-cvc').value) {
+                    alert('Please fill out all credit card details.');
+                    isValid = false;
+                }
+            }
+
+            // Validate PayPal Email
+            if (selectedPaymentMethod === 'PayPal' && !document.getElementById('paypal_email').value) {
+                alert('Please enter your PayPal email.');
+                isValid = false;
+            }
+
+            // If any validation failed, prevent form submission
+            if (!isValid) {
+                e.preventDefault();
+            }
         });
-    });
-</script>
+
+        // Handle display of payment method details
+        document.querySelectorAll('input[name="payment_method"]').forEach(input => {
+            input.addEventListener('change', function() {
+                document.getElementById('credit_card_details').style.display = this.value === 'Credit Card' ? 'block' : 'none';
+                document.getElementById('paypal_details').style.display = this.value === 'PayPal' ? 'block' : 'none';
+                document.getElementById('afterpay_details').style.display = this.value === 'Afterpay' ? 'block' : 'none';
+            });
+        });
+    </script>
+
 </body>
 </html>
