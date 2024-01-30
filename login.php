@@ -1,10 +1,11 @@
 <?php
-require_once "connect.php"; // This file should contain your database connection details
 
-// Start session
-session_start();
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
-$error_message = '';
+
+$error_message = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $staffID = $_POST['StaffID'];
@@ -16,56 +17,67 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->bindParam(':staffID', $staffID);
         $stmt->execute();
 
-        // Check if user exists
         if ($stmt->rowCount() == 1) {
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            // Verify the password (consider storing hashed passwords and using password_verify)
-            if ($password == $user['password']) { // Replace this line if you're using hashed passwords
+            // Verify the password. Use password_verify if passwords are hashed
+            if (password_verify($password, $user['password'])) {
+                // Set session variables
                 $_SESSION['user_id'] = $user['StaffID'];
                 $_SESSION['username'] = $user['FirstName'] . ' ' . $user['LastName'];
-                $_SESSION['is_admin'] = ($user['Position'] == 'Manager'); // Example condition for admin
+                $_SESSION['loggedIn'] = true;
 
-                header('Location: index.php');
+                // Redirect user to the appropriate dashboard
+                if ($user['Position'] === 'Instructor') {
+                    $_SESSION['is_instructor'] = true;
+                    header('Location: instructor_dashboard.php');
+                } else {
+                    // Assuming any other role is considered as Staff/Admin
+                    $_SESSION['is_admin'] = true;
+                    header('Location: staff_dashboard.php');
+                }
                 exit();
             } else {
-                $error_message = 'Invalid Username or Password!';
+                $error_message = "Invalid Username or Password!";
             }
         } else {
-            $error_message = 'Invalid Username or Password!';
+            $error_message = "Invalid Username or Password!";
         }
     } catch (PDOException $e) {
-        $error_message = 'Error: ' . $e->getMessage();
+        $error_message = "Error: " . $e->getMessage();
     }
 }
 ?>
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- ... head elements ... -->
-    <title>Login - Admin</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<div class="login-container">
     <form method="post" action="login.php">
-        <h2>Admin Login</h2>
-        <p>
-            <label for="username">Username:</label>
-            <input type="text" name="username" id="username" required>
-        </p>
-        <p>
+        <h2>Login</h2>
+        <div class="form-group">
+            <label for="StaffID">Staff ID:</label>
+            <input type="text" name="StaffID" id="StaffID" required>
+        </div>
+        <div class="form-group">
             <label for="password">Password:</label>
             <input type="password" name="password" id="password" required>
-        </p>
-        <p>
+        </div>
+        <div class="form-group">
             <input type="submit" value="Login">
-        </p>
+        </div>
         <?php
         if ($error_message != '') {
-            echo '<p>' . $error_message . '</p>';
+            echo '<div class="error-message">' . htmlspecialchars($error_message) . '</div>';
         }
         ?>
     </form>
+</div>
 </body>
 </html>

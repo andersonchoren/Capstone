@@ -1,73 +1,3 @@
-<?php
-session_start();
-
-// Redirect the user to the login page if they're not logged in or if they're not staff.
-if (!isset($_SESSION['loggedIn']) || $_SESSION['loggedIn'] !== true || !isset($_SESSION['is_admin']) && !$_SESSION['is_staff']) {
-    header("Location: login.php");
-    exit;
-}
-
-require_once "connect.php";
-
-// Get the list of students' bookings
-$bookings = [];
-$sql = "SELECT * FROM bookings";
-$result = $conn->query($sql);
-
-if ($result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        $bookings[] = $row;
-    }
-}
-
-// Get the list of schedules
-$schedules = [];
-$sql = "SELECT * FROM schedules";
-$result = $conn->query($sql);
-
-if ($result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        $schedules[] = $row;
-    }
-}
-
-// Get the list of reminders
-$reminders = [];
-$sql = "SELECT * FROM reminders";
-$result = $conn->query($sql);
-
-if ($result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        $reminders[] = $row;
-    }
-}
-
-// Get the list of invoices
-$invoices = [];
-$sql = "SELECT * FROM invoices";
-$result = $conn->query($sql);
-
-if ($result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        $invoices[] = $row;
-    }
-}
-
-// Get the list of payments
-$payments = [];
-$sql = "SELECT * FROM payments";
-$result = $conn->query($sql);
-
-if ($result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        $payments[] = $row;
-    }
-}
-
-// Close the database connection
-$conn->close();
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -187,13 +117,7 @@ $conn->close();
             <?php endforeach; ?>
         </table>
     </div>
-</div>
-    <!-- The sections for bookings, schedules, reminders, invoices, and payments go here -->
-    <!-- Similar to the structure provided in your original code -->
 
-    <!-- ... existing HTML code for displaying data ... -->
-
-</div>
 
 <footer>
     <p>&copy; <?php echo date("Y"); ?> Excel Driving School. All rights reserved.
