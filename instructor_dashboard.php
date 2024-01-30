@@ -9,7 +9,7 @@
 <body>
 <header>
     <div class="logo">
-        <img src="image/logo.JPEG" alt="Excel Driving School Logo">
+        <img src="image/logo..JPEG" alt="Excel Driving School Logo" style="width:15%; height: auto;">
         <h1>Excel Driving School - Instructor Dashboard</h1>
     </div>
     <p>Welcome, <?php echo $_SESSION['username']; ?>! (Instructor)</p>
