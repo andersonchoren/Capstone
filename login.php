@@ -1,32 +1,45 @@
 <?php
-require_once "connect.php";
+require_once "connect.php"; // This file should contain your database connection details
 
 // Start session
 session_start();
 
-// Include your database connection here
-// require 'db_connection.php';
-
 $error_message = '';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $username = $_POST['username'];
+    $staffID = $_POST['StaffID'];
     $password = $_POST['password'];
 
-    // Validate login credentials
-    // You should retrieve user data from the database and verify the password
-    // This is just a placeholder logic
-    if ($username == 'admin' && $password == 'password') {
-        $_SESSION['user_id'] = 1; // Example user ID
-        $_SESSION['username'] = $username;
-        $_SESSION['is_admin'] = true;
-        header('Location: index.php');
-        exit();
-    } else {
-        $error_message = 'Invalid Username or Password!';
+    // Attempt to retrieve the user from the database
+    try {
+        $stmt = $pdo->prepare("SELECT * FROM Staff WHERE StaffID = :staffID");
+        $stmt->bindParam(':staffID', $staffID);
+        $stmt->execute();
+
+        // Check if user exists
+        if ($stmt->rowCount() == 1) {
+            $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            // Verify the password (consider storing hashed passwords and using password_verify)
+            if ($password == $user['password']) { // Replace this line if you're using hashed passwords
+                $_SESSION['user_id'] = $user['StaffID'];
+                $_SESSION['username'] = $user['FirstName'] . ' ' . $user['LastName'];
+                $_SESSION['is_admin'] = ($user['Position'] == 'Manager'); // Example condition for admin
+
+                header('Location: index.php');
+                exit();
+            } else {
+                $error_message = 'Invalid Username or Password!';
+            }
+        } else {
+            $error_message = 'Invalid Username or Password!';
+        }
+    } catch (PDOException $e) {
+        $error_message = 'Error: ' . $e->getMessage();
     }
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
