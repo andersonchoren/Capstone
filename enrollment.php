@@ -32,23 +32,6 @@ $conn = new mysqli($servername, $dbUsername, $dbPassword, $dbname);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
-// Check if form is submitted
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $selectedCourseId = $_POST['course']; // Get the selected course ID from the form
-
-    // Fetch the selected course details from the database
-    $courseSql = "SELECT CourseName, Price FROM Courses WHERE CourseID = '$selectedCourseId'";
-    $courseResult = $conn->query($courseSql);
-    if ($courseResult && $courseResult->num_rows > 0) {
-        $courseDetails = $courseResult->fetch_assoc();
-        $_SESSION['selectedCourseName'] = $courseDetails['CourseName']; // Store course name in session
-        $_SESSION['selectedCoursePrice'] = $courseDetails['Price']; // Store course price in session
-    }
-
-    // Redirect to payment.php
-    header("Location: payment.php");
-    exit;
-}
 ?>
 
 <header>

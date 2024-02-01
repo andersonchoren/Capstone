@@ -13,7 +13,7 @@ if (isset($_SESSION['lastBookingId'])) {
             if ($row = $result->fetch_assoc()) {
                 // Prepare variables from the row for display (ensure to escape output)
                 $bookingId = htmlspecialchars($row['BookingID']);
-                $studentId = htmlspecialchars($row['studentID']);
+                $studentId = htmlspecialchars($row['StudentID']);
                 // ... Other variables ...
                 $bookingDate = htmlspecialchars($row['BookingDate']);
                 $status = htmlspecialchars($row['Status']);
@@ -62,12 +62,28 @@ if (isset($_SESSION['lastBookingId'])) {
     <?php if (isset($error_message)): ?>
         <p class="error"><?php echo $error_message; ?></p>
     <?php else: ?>
-        <p>Booking : <?php echo $bookingId; ?></p>
-        <p>Student : <?php echo $studentId; ?></p>
-        <!-- ... Other details ... -->
-        <p>Booking Date: <?php echo $bookingDate; ?></p>
-        <p>Status: <?php echo $status; ?></p>
-        <p>Payment Confirmed: <?php echo $paymentConfirmed; ?></p>
+        <form action="update_booking.php" method="post">
+            <input type="hidden" name="bookingId" value="<?php echo $bookingId; ?>">
+
+            <!-- Display other booking details as editable fields -->
+            <label for="studentId">Student ID:</label>
+            <input type="text" name="studentId" value="<?php echo $studentId; ?>"><br>
+
+            <!-- ... include other fields as necessary ... -->
+            <label for="bookingDate">Booking Date:</label>
+            <input type="date" name="bookingDate" value="<?php echo $bookingDate; ?>"><br>
+
+            <label for="status">Status:</label>
+            <input type="text" name="status" value="<?php echo $status; ?>"><br>
+
+            <label for="paymentConfirmed">Payment Confirmed:</label>
+            <select name="paymentConfirmed">
+                <option value="1" <?php echo $paymentConfirmed == 'Yes' ? 'selected' : ''; ?>>Yes</option>
+                <option value="0" <?php echo $paymentConfirmed == 'No' ? 'selected' : ''; ?>>No</option>
+            </select><br>
+
+            <input type="submit" value="Update Booking">
+        </form>
     <?php endif; ?>
 </section>
 
