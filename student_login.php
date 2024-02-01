@@ -24,8 +24,9 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
             exit;
         } else {
             // Invalid password
-            echo "Invalid password";
-        }
+                    $_SESSION['error_message'] = "Invalid password. Please try again.";
+                    header("Location: student_login.php");
+                }
     } else {
         // Username not found
         echo "Invalid username";
