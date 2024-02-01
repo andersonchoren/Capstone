@@ -1,3 +1,18 @@
+<?php
+session_start();
+require_once "connect.php";
+
+// Check if the user is logged in and has the role of staff
+if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'staff') {
+    header('Location: login.php'); // Redirect to login page
+    exit();
+}
+
+// Fetch bookings
+$sql = "SELECT BookingID, StudentID, BookingDate, Status, PaymentConfirmed FROM Bookings";
+$result = $conn->query($sql);
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,112 +27,41 @@
         <img src="image/logo..JPEG" alt="Excel Driving School Logo" style="width:15%; height: auto;">
         <h1>Excel Driving School - Staff Dashboard</h1>
     </div>
-    <p>Welcome, <?php echo $_SESSION['username']; ?>! (Staff)</p>
+    <p>Welcome, <?php echo htmlspecialchars($_SESSION['username']); ?>! (Staff)</p>
 </header>
 
 <nav>
     <ul>
-        <li><a href="#bookings">Students Bookings</a></li>
-        <li><a href="#schedules">Schedules</a></li>
-        <li><a href="#reminders">Reminders</a></li>
-        <li><a href="#invoices">Invoices</a></li>
-        <li><a href="#payments">Payments</a></li>
+        <li><a href="logout.php">Logout</a></li>
     </ul>
 </nav>
 
-<div class="description-container">
-    <h1 class="title">Welcome to the Staff Dashboard!</h1>
-    <p class="subtitle">Manage students' bookings, schedules, reminders, invoices, and payments.</p>
-    <div id="bookings">
-        <h2>Students Bookings</h2>
-        <table>
-            <tr>
-                <th>Student Name</th>
-                <th>Booking Date</th>
-                <th>Course</th>
-            </tr>
-            <?php foreach ($bookings as $booking): ?>
-                <tr>
-                    <td><?php echo $booking['student_name']; ?></td>
-                    <td><?php echo $booking['booking_date']; ?></td>
-                    <td><?php echo $booking['course']; ?></td>
-                </tr>
-            <?php endforeach; ?>
-        </table>
-    </div>
+<div id="bookings" class="dashboard-section">
+    <h2>Students Bookings</h2>
+    <?php
+    if ($result->num_rows > 0) {
+        echo "<table>"; // Start a table
+        echo "<tr><th>Booking ID</th><th>Student ID</th><th>Booking Date</th><th>Status</th><th>Payment Confirmed</th><th>Actions</th></tr>";
+        // Output data of each row
+        while($row = $result->fetch_assoc()) {
+            echo "<tr>";
+            echo "<td>" . htmlspecialchars($row["BookingID"]). "</td>";
+            echo "<td>" . htmlspecialchars($row["StudentID"]). "</td>";
+            echo "<td>" . htmlspecialchars($row["BookingDate"]). "</td>";
+            echo "<td>" . htmlspecialchars($row["Status"]). "</td>";
+            echo "<td>" . ($row["PaymentConfirmed"] ? 'Yes' : 'No') . "</td>";
+            // Edit link (pass the BookingID as a GET parameter)
+            echo "<td><a href='booking_edit.php?bookingId=" . $row["BookingID"] . "'>Edit</a></td>";
+            echo "</tr>";
+        }
+        echo "</table>"; // Close the table
+    } else {
+        echo "0 results";
+    }
+    ?>
+</div>
 
-    <div id="schedules">
-        <h2>Schedules</h2>
-        <table>
-            <tr>
-                <th>Course</th>
-                <th>Date</th>
-                <th>Time</th>
-            </tr>
-            <?php foreach ($schedules as $schedule): ?>
-                <tr>
-                    <td><?php echo $schedule['course']; ?></td>
-                    <td><?php echo $schedule['date']; ?></td>
-                    <td><?php echo $schedule['time']; ?></td>
-                </tr>
-            <?php endforeach; ?>
-        </table>
-    </div>
-
-    <div id="reminders">
-        <h2>Reminders</h2>
-        <table>
-            <tr>
-                <th>Student Name</th>
-                <th>Reminder Date</th>
-                <th>Reminder Message</th>
-            </tr>
-            <?php foreach ($reminders as $reminder): ?>
-                <tr>
-                    <td><?php echo $reminder['student_name']; ?></td>
-                    <td><?php echo $reminder['reminder_date']; ?></td>
-                    <td><?php echo $reminder['reminder_message']; ?></td>
-                </tr>
-            <?php endforeach; ?>
-        </table>
-    </div>
-
-    <div id="invoices">
-        <h2>Invoices</h2>
-        <table>
-            <tr>
-                <th>Student Name</th>
-                <th>Invoice Date</th>
-                <th>Amount</th>
-            </tr>
-            <?php foreach ($invoices as $invoice): ?>
-                <tr>
-                    <td><?php echo $invoice['student_name']; ?></td>
-                    <td><?php echo $invoice['invoice_date']; ?></td>
-                    <td><?php echo $invoice['amount']; ?></td>
-                </tr>
-            <?php endforeach; ?>
-        </table>
-    </div>
-
-    <div id="payments">
-        <h2>Payments</h2>
-        <table>
-            <tr>
-                <th>Student Name</th>
-                <th>Payment Date</th>
-                <th>Amount</th>
-            </tr>
-            <?php foreach ($payments as $payment): ?>
-                <tr>
-                    <td><?php echo $payment['student_name']; ?></td>
-                    <td><?php echo $payment['payment_date']; ?></td>
-                    <td><?php echo $payment['amount']; ?></td>
-                </tr>
-            <?php endforeach; ?>
-        </table>
-    </div>
-
+<!-- Implement similar structures for Schedules, Reminders, Invoices, Payments -->
 
 <footer>
     <p>&copy; <?php echo date("Y"); ?> Excel Driving School. All rights reserved.

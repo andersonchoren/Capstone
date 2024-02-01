@@ -602,3 +602,35 @@ h2 {
     max-width: 560px;
     border: none;
 }
+/* Add your CSS styles here */
+body {
+    font-family: Arial, sans-serif;
+}
+
+.dashboard-section {
+    margin: 20px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.dashboard-section h2 {
+    margin-top: 0;
+    color: #333;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table, th, td {
+    border: 1px solid black;
+}
+
+th, td {
+    padding: 8px;
+    text-align: left;
+}
+
+/* More styles as needed */
