@@ -3,35 +3,95 @@ session_start();
 require_once "connect.php";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Retrieve form data
-    $studentId = $_SESSION['user_id']; // Assuming the student's ID is stored in the session
-    $branchId = $_POST['branch'];
-    $vehicleId = $_POST['vehicle'];
-    $courseId = $_POST['course'];
-    $scheduleId = $_POST['schedule'];
-    $instructorId = $_POST['instructor'];
+    // Initialize the connection to start transaction
+    $conn->begin_transaction();
 
-    $bookingDate = date("Y-m-d"); // Current date for the booking
-    $status = "Pending"; // Default status
-    $paymentConfirmed = 0; // Default to 0 (not confirmed)
+    try {
+        // Retrieve form data
+        $studentId = $_SESSION['user_id']; // Assuming the student's ID is stored in the session
+        $branchId = $_POST['branch'];
+        $vehicleId = $_POST['vehicle'];
+        $courseId = $_POST['course'];
+        $scheduleId = $_POST['schedule'];
+        $instructorId = $_POST['instructor'];
 
-    // Prepare an insert statement for the Bookings table
-    $sql = "INSERT INTO Bookings (StudentID, BranchID, VehicleID, CourseID, ScheduleID, InstructorID, BookingDate, Status, PaymentConfirmed) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        // Fetch the price of the selected course
+        $sqlPrice = "SELECT Price FROM Courses WHERE CourseID = ?";
+        $stmtPrice = $conn->prepare($sqlPrice);
+        $stmtPrice->bind_param("i", $courseId);
+        $stmtPrice->execute();
+        $stmtPrice->bind_result($amountDue); // This will be used as the invoice amount
+        $stmtPrice->fetch();
+        $stmtPrice->close();
 
-    if ($stmt = $conn->prepare($sql)) {
-        $stmt->bind_param("iiiiisssi", $studentId, $branchId, $vehicleId, $courseId, $scheduleId, $instructorId, $bookingDate, $status, $paymentConfirmed);
+        $bookingDate = date("Y-m-d"); // Current date for the booking
+        $status = "Pending"; // Default status for booking
+        $paymentConfirmed = 0; // Default to 0 (not confirmed)
 
-        if ($stmt->execute()) {
+        // Prepare an insert statement for the Bookings table
+        $sql = "INSERT INTO Bookings (StudentID, BranchID, VehicleID, CourseID, ScheduleID, InstructorID, BookingDate, Status, PaymentConfirmed) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        if ($stmt = $conn->prepare($sql)) {
+            $stmt->bind_param("iiiiisssi", $studentId, $branchId, $vehicleId, $courseId, $scheduleId, $instructorId, $bookingDate, $status, $paymentConfirmed);
+            if (!$stmt->execute()) {
+                throw new Exception("Error: " . $stmt->error);
+            }
             // Store the last inserted booking ID in the session for later retrieval
             $_SESSION['lastBookingId'] = $conn->insert_id;
-
+            $stmt->close();
         } else {
-            echo "Error: " . $stmt->error;
+            throw new Exception("Error preparing statement: " . $conn->error);
         }
-        $stmt->close();
-    } else {
-        echo "Error preparing statement: " . $conn->error;
+
+        $dueDate = date("Y-m-d", strtotime("+30 days")); // setting due date as 30 days from today
+        $invoiceStatus = 'Pending'; // Default invoice status
+
+        // Prepare an insert statement for the Invoices table
+        $sqlInvoice = "INSERT INTO Invoices (StudentID, AmountDue, DueDate, Status) VALUES (?, ?, ?, ?)";
+        if ($stmtInvoice = $conn->prepare($sqlInvoice)) {
+            $stmtInvoice->bind_param("idss", $studentId, $amountDue, $dueDate, $invoiceStatus);
+            if (!$stmtInvoice->execute()) {
+                throw new Exception("Error: " . $stmtInvoice->error);
+            }
+            // Get the last inserted invoice ID
+            $lastInvoiceId = $conn->insert_id;
+            $stmtInvoice->close();
+        } else {
+            throw new Exception("Error preparing invoice statement: " . $conn->error);
+        }
+
+        // Fetching student email
+        $sqlEmail = "SELECT Email FROM Students WHERE StudentID = ?";
+        $email = '';
+        if ($stmtEmail = $conn->prepare($sqlEmail)) {
+            $stmtEmail->bind_param("i", $studentId);
+            $stmtEmail->execute();
+            $stmtEmail->bind_result($email);
+            $stmtEmail->fetch();
+            $stmtEmail->close();
+        } else {
+            throw new Exception("Error preparing email fetch statement: " . $conn->error);
+        }
+
+        // Sending email notification
+        if (!empty($email)) {
+            $to = $email;
+            $subject = "Invoice from Excel Driving School";
+            $message = "Dear Student,\n\nYour invoice has been created.\nInvoice ID: $lastInvoiceId\nAmount Due: $amountDue\nDue Date: $dueDate\n\nThank you for choosing Excel Driving School.";
+            $headers = "From: admin@exceldrivingschool.com";
+            if (!mail($to, $subject, $message, $headers)) {
+                throw new Exception("Failed to send the invoice.");
+            }
+        }
+
+        // If everything was successful, commit the transaction
+        $conn->commit();
+    } catch (Exception $e) {
+        // An error occurred, roll back the transaction
+        $conn->rollback();
+        echo $e->getMessage(); // Or handle error appropriately
     }
+
+    // Close the connection
     $conn->close();
 } else {
     echo "Form not submitted properly.";
