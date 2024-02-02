@@ -71,7 +71,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         } else {
             throw new Exception("Error preparing email fetch statement: " . $conn->error);
         }
-
         // Sending email notification
         if (!empty($email)) {
             $to = $email;
@@ -82,7 +81,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 throw new Exception("Failed to send the invoice.");
             }
         }
-
         // If everything was successful, commit the transaction
         $conn->commit();
     } catch (Exception $e) {
@@ -90,11 +88,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $conn->rollback();
         echo $e->getMessage(); // Or handle error appropriately
     }
-
     // Close the connection
     $conn->close();
-} else {
-    echo "Form not submitted properly.";
 }
 ?>
 
@@ -119,6 +114,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <li><a href="javascript:if (window.history.length > 1) { window.history.back(); } else { window.location.href = 'index.html'; }">Back to Previous Page</a></li>
     </ul>
 </nav>
+<?= 'test'?>
 <h1>Payment Form</h1>
 
 <!-- Show error message if there is one -->
@@ -126,7 +122,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <p class="error"><?php echo $error_message; ?></p>
 <?php } ?>
 
-<form id="payment-form" action="Invoices.php" method="POST">
+<form id="payment-form" action="student-area.html" method="POST">
     <!-- Choose Payment Method -->
     <div>
         <input type="radio" id="credit_card" name="payment_method" value="Credit Card" checked>

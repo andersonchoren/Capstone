@@ -9,7 +9,12 @@ if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'staff') {
 }
 
 // Fetch bookings
-$sql = "SELECT BookingID, StudentID, BookingDate, Status, PaymentConfirmed FROM Bookings";
+$sql = "select br.BranchName,ins.FirstName,f.Model,bk.BookingID, bk.Status, bk.PaymentConfirmed,c.CourseName,cls.StartTime,cls.ClassDate from branches br
+    inner join bookings bk on br.BranchID = bk.BranchID
+    inner join instructors ins on bk.InstructorID = ins.InstructorID
+    inner join fleet f on bk.VehicleID = f.VehicleID
+    inner join courses c on bk.CourseID = c.CourseID
+    inner join classschedules cls on bk.ScheduleID = cls.ScheduleID;";
 $result = $conn->query($sql);
 
 ?>
@@ -45,7 +50,7 @@ $result = $conn->query($sql);
         // Output data of each row
         while($row = $result->fetch_assoc()) {
             echo "<tr>";
-            echo "<td>" . htmlspecialchars($row["BookingID"]). "</td>";
+            echo "<td>" . htmlspecialchars($row["BranchName"]). "</td>";
             echo "<td>" . htmlspecialchars($row["StudentID"]). "</td>";
             echo "<td>" . htmlspecialchars($row["BookingDate"]). "</td>";
             echo "<td>" . htmlspecialchars($row["Status"]). "</td>";

@@ -2,12 +2,8 @@
 require_once "connect.php";
 // Start session
 session_start();
-
-// Unset all session variables
-$_SESSION = array();
-
 // Destroy the session.
-session_destroy();
+unset($_SESSION['Username']);
 
 // Redirect to login page
 header("Location: index.html");

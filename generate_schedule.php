@@ -17,8 +17,8 @@ if (!$stmt) {
 }
 
 // Determine the date range
-$startDate = new DateTime(); // today
-$endDate = (new DateTime())->modify('+1 weeks'); // 2 months from today
+$startDate = (new DateTime())->modify('+1 weeks');
+$endDate = (new DateTime())->modify('+1 weeks');
 
 // Iterate over each day in the range
 for ($date = clone $startDate; $date <= $endDate; $date->modify('+1 day')) {
