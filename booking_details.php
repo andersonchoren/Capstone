@@ -2,24 +2,21 @@
 session_start();
 require_once "connect.php";
 
-if (isset($_SESSION['lastBookingId'])) {
-    $bookingId = $_SESSION['lastBookingId'];
+if (isset($_SESSION['user_id'])) { // Ensure the user is logged in
+    $studentId = $_SESSION['user_id'];
 
-    $sql = "SELECT * FROM Bookings WHERE BookingID = ?";
+    // SQL to fetch all bookings for the logged-in student
+    $sql = "SELECT * FROM Bookings WHERE StudentID = ?";
     if ($stmt = $conn->prepare($sql)) {
-        $stmt->bind_param("i", $bookingId);
+        $stmt->bind_param("i", $studentId); // Use the studentId from the session
         if ($stmt->execute()) {
             $result = $stmt->get_result();
-            if ($row = $result->fetch_assoc()) {
-                // Prepare variables from the row for display (ensure to escape output)
-                $bookingId = htmlspecialchars($row['BookingID']);
-                $studentId = htmlspecialchars($row['StudentID']);
-                // ... Other variables ...
-                $bookingDate = htmlspecialchars($row['BookingDate']);
-                $status = htmlspecialchars($row['Status']);
-                $paymentConfirmed = $row['PaymentConfirmed'] ? 'Yes' : 'No';
-            } else {
-                $error_message = "No booking found for the given ID.";
+            $bookings = [];
+            while ($row = $result->fetch_assoc()) {
+                array_push($bookings, $row);
+            }
+            if (count($bookings) == 0) {
+                $error_message = "No bookings found for the student.";
             }
         } else {
             $error_message = "Error executing query: " . $stmt->error;
@@ -30,7 +27,7 @@ if (isset($_SESSION['lastBookingId'])) {
     }
     $conn->close();
 } else {
-    $error_message = "Invalid access or no booking found.";
+    $error_message = "Invalid access or no student ID found.";
 }
 ?>
 
@@ -62,12 +59,26 @@ if (isset($_SESSION['lastBookingId'])) {
     <?php if (isset($error_message)): ?>
         <p class="error"><?php echo $error_message; ?></p>
     <?php else: ?>
-        <p>Booking : <?php echo $bookingId; ?></p>
-        <p>Student : <?php echo $studentId; ?></p>
-        <!-- ... Other details ... -->
-        <p>Booking Date: <?php echo $bookingDate; ?></p>
-        <p>Status: <?php echo $status; ?></p>
-        <p>Payment Confirmed: <?php echo $paymentConfirmed; ?></p>
+        <table>
+            <tr>
+                <th>Booking ID</th>
+                <th>Student ID</th>
+                <!-- ... Other headers ... -->
+                <th>Booking Date</th>
+                <th>Status</th>
+                <th>Payment Confirmed</th>
+            </tr>
+            <?php foreach ($bookings as $booking): ?>
+                <tr>
+                    <td><?php echo htmlspecialchars($booking['BookingID']); ?></td>
+                    <td><?php echo htmlspecialchars($booking['StudentID']); ?></td>
+                    <!-- ... Other details ... -->
+                    <td><?php echo htmlspecialchars($booking['BookingDate']); ?></td>
+                    <td><?php echo htmlspecialchars($booking['Status']); ?></td>
+                    <td><?php echo $booking['PaymentConfirmed'] ? 'Yes' : 'No'; ?></td>
+                </tr>
+            <?php endforeach; ?>
+        </table>
     <?php endif; ?>
 </section>
 
