@@ -88,8 +88,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $conn->rollback();
         echo $e->getMessage(); // Or handle error appropriately
     }
-    // Close the connection
-    $conn->close();
 }
 ?>
 
@@ -115,6 +113,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </ul>
 </nav>
 
+<?php
+$branchSql = "SELECT BranchName FROM Branches where BranchID = 1";
+$branchResult = $conn->query($branchSql);
+if ($branchResult && $branchResult->num_rows > 0) {
+    echo $branchResult->fetch_column(0);
+} else {
+    echo "<p>No branches found.</p>";
+}
+
+// Close the connection
+$conn->close();
+?>
 
 <h1>Payment Form</h1>
 <!-- Show error message if there is one -->
