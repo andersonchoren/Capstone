@@ -109,23 +109,40 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </header>
 <nav>
     <ul>
-        <li><a href="javascript:if (window.history.length > 1) { window.history.back(); } else { window.location.href = 'index.html'; }">Back to Previous Page</a></li>
+        <li>
+            <a href="javascript:if (window.history.length > 1) { window.history.back(); } else { window.location.href = 'index.html'; }">Back
+                to Previous Page</a></li>
     </ul>
 </nav>
 
 <?php
-$branchSql = "SELECT BranchName FROM Branches where BranchID = 1";
+$branchId = $_POST['branch'];
+$branchSql = "SELECT BranchName FROM Branches where BranchID = $branchId";
 $branchResult = $conn->query($branchSql);
-if ($branchResult && $branchResult->num_rows > 0) {
-    echo $branchResult->fetch_column(0);
-} else {
-    echo "<p>No branches found.</p>";
-}
+$arrayBranch = $branchResult->fetch_assoc();
+
+$vehicleId = $_POST['vehicle'];
+$vehicleSql = "SELECT Model FROM fleet where VehicleID = $vehicleId";
+$vehicleResult = $conn->query($vehicleSql);
+$arrayVehicle = $vehicleResult->fetch_assoc();
 
 // Close the connection
 $conn->close();
 ?>
-
+<table>
+    <thead>
+    <tr>
+        <th>Branch</th>
+        <th>Vehicle model</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td><?= $arrayBranch['BranchName'] ?></td>
+        <td><?= $arrayVehicle['Model'] ?></td>
+    </tr>
+    </tbody>
+</table>
 <h1>Payment Form</h1>
 <!-- Show error message if there is one -->
 <?php if (!empty($error_message)) { ?>
@@ -171,13 +188,14 @@ $conn->close();
     </div>
     <button type="submit" name="submit_payment">Pay Now</button>
 
-<footer>
-    <p> 2024 Excel Driving School. All rights reserved. <a href="mailto:services@exceldriving.com">exceldriving@syd.com.au</a></p>
-</footer>
+    <footer>
+        <p> 2024 Excel Driving School. All rights reserved. <a href="mailto:services@exceldriving.com">exceldriving@syd.com.au</a>
+        </p>
+    </footer>
 
     <script>
         // JavaScript to handle display and validation of payment method details
-        document.getElementById('payment-form').addEventListener('submit', function(e) {
+        document.getElementById('payment-form').addEventListener('submit', function (e) {
             const selectedPaymentMethod = document.querySelector('input[name="payment_method"]:checked').value;
             let isValid = true;
 
@@ -203,7 +221,7 @@ $conn->close();
 
         // Handle display of payment method details
         document.querySelectorAll('input[name="payment_method"]').forEach(input => {
-            input.addEventListener('change', function() {
+            input.addEventListener('change', function () {
                 document.getElementById('credit_card_details').style.display = this.value === 'Credit Card' ? 'block' : 'none';
                 document.getElementById('paypal_details').style.display = this.value === 'PayPal' ? 'block' : 'none';
                 document.getElementById('afterpay_details').style.display = this.value === 'Afterpay' ? 'block' : 'none';
@@ -212,4 +230,3 @@ $conn->close();
     </script>
 
 </body>
-</html>
