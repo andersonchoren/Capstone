@@ -45,7 +45,7 @@ $result = $conn->query($sql);
     <?php
     if ($result->num_rows > 0) {
         echo "<table>"; // Start a table
-        echo "<tr><th>Instructor First Name</th><th>Instructor Last Name</th><th>Student First Name</th><th>Student Last Name</th><th>Branch</th><th>Booking Date</th><th>Payment Status</th><th>Booking Accept</th><th>Actions</th></tr>";
+        echo "<tr><th>Instructor First Name</th><th>Instructor Last Name</th><th>Student First Name</th><th>Student Last Name</th><th>Branch</th><th>Booking Date</th><th>Course Date</th><th>Payment Status</th><th>Booking Accept</th><th>Actions</th></tr>";
         // Output data of each row
         while($row = $result->fetch_assoc()) {
             echo "<tr>";
@@ -55,6 +55,7 @@ $result = $conn->query($sql);
             echo "<td>" . htmlspecialchars($row["lastname"]) . "</td>";
             echo "<td>" . htmlspecialchars($row["BranchName"]) . "</td>";
             echo "<td>" . htmlspecialchars($row["BookingDate"]). "</td>";
+            echo "<td>" . htmlspecialchars($row["ClassDate"]). "</td>";
             echo "<td>" . htmlspecialchars($row["Status"]). "</td>";
             echo "<td>" . ($row["PaymentConfirmed"] ? 'Yes' : 'No') . "</td>";
             // Edit link (pass the BookingID as a GET parameter)

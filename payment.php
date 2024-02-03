@@ -114,9 +114,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <li><a href="javascript:if (window.history.length > 1) { window.history.back(); } else { window.location.href = 'index.html'; }">Back to Previous Page</a></li>
     </ul>
 </nav>
-<?= 'test'?>
-<h1>Payment Form</h1>
 
+
+<h1>Payment Form</h1>
 <!-- Show error message if there is one -->
 <?php if (!empty($error_message)) { ?>
     <p class="error"><?php echo $error_message; ?></p>
