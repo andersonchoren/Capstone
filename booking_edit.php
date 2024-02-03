@@ -34,16 +34,26 @@ if (isset($_GET['bookingId'])) {
 if (!isset($error_message)) {
     // Display form with booking details for editing
     echo "<form action='update_booking.php' method='post'>";
-    echo "<input type='hidden' name='bookingId' value='$bookingId'>";
+    echo "<input type='hidden' name='bookingId' value='$bookingId'>"; // Keeps bookingId but doesn't display it
+
     echo "<label for='bookingDate'>Booking Date:</label>";
     echo "<input type='date' name='bookingDate' value='$bookingDate'><br>";
+
+    // Status dropdown
     echo "<label for='status'>Status:</label>";
-    echo "<input type='text' name='status' value='$status'><br>";
+    echo "<select name='status'>";
+    echo "<option value='Pending'" . ($status == 'Pending' ? ' selected' : '') . ">Pending</option>";
+    echo "<option value='Processing'" . ($status == 'Processing' ? ' selected' : '') . ">Processing</option>";
+    echo "<option value='Approved'" . ($status == 'Approved' ? ' selected' : '') . ">Approved</option>";
+    echo "</select><br>";
+
+    // Payment Confirmed dropdown
     echo "<label for='paymentConfirmed'>Payment Confirmed:</label>";
     echo "<select name='paymentConfirmed'>";
     echo $paymentConfirmed ? "<option value='1' selected>Yes</option><option value='0'>No</option>" :
         "<option value='1'>Yes</option><option value='0' selected>No</option>";
     echo "</select><br>";
+
     echo "<input type='submit' value='Update Booking'>";
     echo "</form>";
 } else {
