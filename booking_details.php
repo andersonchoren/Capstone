@@ -9,9 +9,10 @@ if (isset($_SESSION['user_id'])) { // Ensure the user is logged in
     $studentId = $_SESSION['user_id'];
 
     // SQL to fetch all bookings for the logged-in student, joining with the students table to get the student's name
-    $sql = "SELECT b.BookingID, b.StudentID, s.firstname,br.BranchName,f.Model,c.CourseName,cs.ClassDate, b.BookingDate, b.Status, b.PaymentConfirmed
+    $sql = "SELECT b.BookingID, b.StudentID, s.firstname as StudentFirstName,i.FirstName as InstructorFirstName,br.BranchName,f.Model,c.CourseName,cs.ClassDate,cs.StartTime, b.BookingDate, b.Status, b.PaymentConfirmed
             FROM Bookings b
             INNER JOIN students s ON b.StudentID = s.StudentID
+            INNER JOIN instructors i ON b.InstructorID = i.InstructorID
             INNER JOIN branches br ON b.BranchID = br.BranchID
             INNER JOIN fleet f ON b.VehicleID = f.VehicleID
             INNER JOIN courses c ON b.CourseID = c.CourseID
@@ -73,6 +74,7 @@ if (isset($_SESSION['user_id'])) { // Ensure the user is logged in
             <tr>
                 <th>Booking ID</th>
                 <th>Student ID</th>
+                <th>Instructor Name</th> <!-- Add this header -->
                 <th>Student Name</th>
                 <th>Branch Name</th>
                 <th>Vehicle Model</th>
@@ -86,7 +88,8 @@ if (isset($_SESSION['user_id'])) { // Ensure the user is logged in
                 <tr>
                     <td><?php echo htmlspecialchars($booking['BookingID']); ?></td>
                     <td><?php echo htmlspecialchars($booking['StudentID']); ?></td>
-                    <td><?php echo htmlspecialchars($booking['firstname']); ?></td>
+                    <td><?php echo htmlspecialchars($booking['InstructorFirstName']); ?></td> <!-- Displaying Instructor's FirstName -->
+                    <td><?php echo htmlspecialchars($booking['StudentFirstName']); ?></td>
                     <td><?php echo htmlspecialchars($booking['BranchName']); ?></td>
                     <td><?php echo htmlspecialchars($booking['Model']); ?></td>
                     <td><?php echo htmlspecialchars($booking['CourseName']); ?></td>
