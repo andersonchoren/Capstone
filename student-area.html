@@ -39,6 +39,19 @@
     <p>For experienced drivers, our advanced courses focus on defensive driving, complex traffic situations, and advanced vehicle control.</p>
     <!-- More details or a list of advanced courses -->
   </section>
+  <div id="notification-area"></div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const notification = urlParams.get('notification');
+      const bookingId = urlParams.get('bookingId');
+
+      if(notification === 'reminder_sent' && bookingId) {
+        document.getElementById('notification-area').innerHTML = `<p>Reminder for booking ID ${bookingId} has been sent.</p>`;
+      }
+    });
+  </script>
 </main>
 <footer style="background-color:red; padding: 20px 0; text-align: center;">
   <div style="max-width: 800px; margin: 0 auto;">
