@@ -2,16 +2,26 @@
 session_start();
 require_once "connect.php";
 
+$bookings = [];
+$error_message = "";
+
 if (isset($_SESSION['user_id'])) { // Ensure the user is logged in
     $studentId = $_SESSION['user_id'];
 
-    // SQL to fetch all bookings for the logged-in student
-    $sql = "SELECT * FROM Bookings WHERE StudentID = ?";
+    // SQL to fetch all bookings for the logged-in student, joining with the students table to get the student's name
+    $sql = "SELECT b.BookingID, b.StudentID, s.firstname,br.BranchName,f.Model,c.CourseName,cs.ClassDate, b.BookingDate, b.Status, b.PaymentConfirmed
+            FROM Bookings b
+            INNER JOIN students s ON b.StudentID = s.StudentID
+            INNER JOIN branches br ON b.BranchID = br.BranchID
+            INNER JOIN fleet f ON b.VehicleID = f.VehicleID
+            INNER JOIN courses c ON b.CourseID = c.CourseID
+            INNER JOIN classschedules cs ON b.ScheduleID = cs.ScheduleID
+            WHERE b.StudentID = ?";
+
     if ($stmt = $conn->prepare($sql)) {
         $stmt->bind_param("i", $studentId); // Use the studentId from the session
         if ($stmt->execute()) {
             $result = $stmt->get_result();
-            $bookings = [];
             while ($row = $result->fetch_assoc()) {
                 array_push($bookings, $row);
             }
@@ -49,21 +59,25 @@ if (isset($_SESSION['user_id'])) { // Ensure the user is logged in
 </header>
 
 <nav>
-    <<ul>
+    <ul>
         <li><a href="javascript:if (window.history.length > 1) { window.history.back(); } else { window.location.href = 'index.html'; }">Back to Previous Page</a></li>
     </ul>
 </nav>
 
 <section class="booking-details-section">
     <h2>Booking Details</h2>
-    <?php if (isset($error_message)): ?>
+    <?php if (!empty($error_message)): ?>
         <p class="error"><?php echo $error_message; ?></p>
-    <?php else: ?>
+    <?php elseif (!empty($bookings)): ?>
         <table>
             <tr>
                 <th>Booking ID</th>
                 <th>Student ID</th>
-                <!-- ... Other headers ... -->
+                <th>Student Name</th>
+                <th>Branch Name</th>
+                <th>Vehicle Model</th>
+                <th>Course Name</th>
+                <th>Class Date</th>
                 <th>Booking Date</th>
                 <th>Status</th>
                 <th>Payment Confirmed</th>
@@ -72,13 +86,19 @@ if (isset($_SESSION['user_id'])) { // Ensure the user is logged in
                 <tr>
                     <td><?php echo htmlspecialchars($booking['BookingID']); ?></td>
                     <td><?php echo htmlspecialchars($booking['StudentID']); ?></td>
-                    <!-- ... Other details ... -->
+                    <td><?php echo htmlspecialchars($booking['firstname']); ?></td>
+                    <td><?php echo htmlspecialchars($booking['BranchName']); ?></td>
+                    <td><?php echo htmlspecialchars($booking['Model']); ?></td>
+                    <td><?php echo htmlspecialchars($booking['CourseName']); ?></td>
+                    <td><?php echo htmlspecialchars($booking['ClassDate']); ?></td>
                     <td><?php echo htmlspecialchars($booking['BookingDate']); ?></td>
                     <td><?php echo htmlspecialchars($booking['Status']); ?></td>
                     <td><?php echo $booking['PaymentConfirmed'] ? 'Yes' : 'No'; ?></td>
                 </tr>
             <?php endforeach; ?>
         </table>
+    <?php else: ?>
+        <p>No bookings found.</p>
     <?php endif; ?>
 </section>
 
@@ -89,5 +109,3 @@ if (isset($_SESSION['user_id'])) { // Ensure the user is logged in
 </footer>
 </body>
 </html>
-
-
