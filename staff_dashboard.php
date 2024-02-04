@@ -1,5 +1,10 @@
 <?php
 session_start();
+
+if (isset($_SESSION['message'])) {
+    echo "<p>" . $_SESSION['message'] . "</p>";
+    unset($_SESSION['message']);
+}
 require_once "connect.php";
 
 // Check if the user is logged in and has the role of staff
@@ -40,6 +45,7 @@ $result = $conn->query($sql);
 </header>
 <nav>
     <ul>
+        <li><a href="invoice_management.php">Invoice Management</a></li>
         <li><a href="logout.php">Logout</a></li>
     </ul>
 </nav>
@@ -49,18 +55,19 @@ $result = $conn->query($sql);
     if ($result->num_rows > 0) {
         echo "<table>";
         echo "<tr>
-                <th>Instructor First Name</th>
-                <th>Instructor Last Name</th>
-                <th>Student First Name</th>
-                <th>Student Last Name</th>
-                <th>Branch</th>
-                <th>Booking Date</th>
-                <th>Course Date</th>
-                <th>Payment Status</th>
-                <th>Booking Accept</th>
-                <th>Actions</th>
-                <th>Send Reminder</th>
-              </tr>";
+        <th>Instructor First Name</th>
+        <th>Instructor Last Name</th>
+        <th>Student First Name</th>
+        <th>Student Last Name</th>
+        <th>Branch</th>
+        <th>Booking Date</th>
+        <th>Course Date</th>
+        <th>Payment Status</th>
+        <th>Booking Accept</th>
+        <th>Actions</th>
+        <th>Send Reminder</th>
+        <th>Cancel Booking</th>  <!-- Add this line -->
+      </tr>";
 
         while($row = $result->fetch_assoc()) {
             echo "<tr>";
@@ -75,6 +82,7 @@ $result = $conn->query($sql);
             echo "<td>" . ($row["PaymentConfirmed"] ? 'Yes' : 'No') . "</td>";
             echo "<td><a href='booking_edit.php?bookingId=" . $row["BookingID"] . "'>Edit</a></td>";
             echo "<td><a href='send_reminder.php?bookingId=" . $row["BookingID"] . "&studentId=" . $row["StudentID"] . "'>Send Reminder</a></td>";
+            echo "<td><a href='cancel_booking.php?bookingId=" . $row["BookingID"] . "' onclick='return confirm(\"Are you sure you want to cancel this booking?\");'>Cancel</a></td>"; // Add this line
             echo "</tr>";
         }
         echo "</table>";

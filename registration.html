@@ -43,7 +43,7 @@
     </ul>
 </nav>
 <div class="container1">
-    <form id="registerForm" action="register.php" method="post"onsubmit="return validateAge()">
+    <form id="registerForm" action="register.php" method="post" enctype="multipart/form-data" onsubmit="return validateAge()">
         <h2>Student Registration</h2>
         <label for="firstName">First Name:</label>
         <input type="text" id="firstName" name="firstname" placeholder="Enter your first name" required>
@@ -79,8 +79,8 @@
         <label for="message">Short Message:</label>
         <textarea id="message" name="message" placeholder="Enter a short message"></textarea>
         <label for="message">Short Message:</label>
-        <label for="fileUpload">Attach files:</label>
-        <input type="file" id="fileUpload" name="fileUpload" multiple>
+        <label for="driverLicenseUpload">Attach your Driver License:</label>
+        <input type="file" id="driverLicenseUpload" name="driverLicenseUpload" required>
         <label>
             <input type="checkbox" name="terms" required> I agree to the terms and conditions.
         </label>
