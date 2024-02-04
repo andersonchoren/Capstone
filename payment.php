@@ -173,38 +173,24 @@ $conn->close();
         <input type="radio" id="credit_card" name="payment_method" value="Credit Card" checked>
         <label for="credit_card">Credit Card</label>
     </div>
-    <div>
-        <input type="radio" id="paypal" name="payment_method" value="PayPal">
-        <label for="paypal">PayPal</label>
-    </div>
-    <div>
-        <input type="radio" id="afterpay" name="payment_method" value="Afterpay">
-        <label for="afterpay">Afterpay</label>
-    </div>
+
     <!-- Credit Card Details -->
     <div id="credit_card_details">
-        <label for="card-number">Card Number:</label>
-        <input type="text" id="card-number" name="card-number">
+        <label for="card-number">Card Number (16 digits):</label>
+        <input type="text" id="card-number" name="card-number" maxlength="16" placeholder="1234 5678 9012 3456">
 
-        <label for="card-expiration-date">Expiration Date:</label>
-        <input type="text" id="card-expiration-date" name="card-expiration-date">
+        <label for="card-expiration-date">Expiration Date (MM/YY):</label>
+        <input type="text" id="card-expiration-date" name="card-expiration-date" placeholder="MM/YY">
 
-        <label for="card-cvc">CVC:</label>
-        <input type="text" id="card-cvc" name="card-cvc">
+        <label for="card-cvc">CVC (3 digits):</label>
+        <input type="text" id="card-cvc" name="card-cvc" maxlength="3" placeholder="123">
 
-    </div>
-    <!-- PayPal Email -->
-    <div id="paypal_details" style="display: none;">
-        <label for="paypal_email">PayPal Email:</label>
-        <input type="email" id="paypal_email" name="paypal_email">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" placeholder="email@example.com">
     </div>
 
-    <!-- Afterpay Details -->
-    <div id="afterpay_details" style="display: none;">
-        <p>Afterpay will be processed on the next page.</p>
-
-    </div>
     <button type="submit" name="submit_payment">Pay Now</button>
+</form>
 
     <footer>
         <p> 2024 Excel Driving School. All rights reserved. <a href="mailto:services@exceldriving.com">exceldriving@syd.com.au</a>
@@ -216,24 +202,53 @@ $conn->close();
         document.getElementById('payment-form').addEventListener('submit', function (e) {
             const selectedPaymentMethod = document.querySelector('input[name="payment_method"]:checked').value;
             let isValid = true;
+            let alertMessage = '';
 
             // Validate Credit Card Details
             if (selectedPaymentMethod === 'Credit Card') {
-                if (!document.getElementById('card-number').value || !document.getElementById('card-expiration-date').value || !document.getElementById('card-cvc').value) {
-                    alert('Please fill out all credit card details.');
+                const cardNumber = document.getElementById('card-number').value;
+                const cardExpirationDate = document.getElementById('card-expiration-date').value;
+                const cardCVC = document.getElementById('card-cvc').value;
+                const email = document.getElementById('email').value;
+
+                // Basic checks for empty fields
+                if (!cardNumber || !cardExpirationDate || !cardCVC || !email) {
+                    alertMessage = 'Please fill out all fields.';
                     isValid = false;
+                } else {
+                    // Specific check for card number length
+                    if (cardNumber.length !== 16) {
+                        alertMessage += 'Card number must be 16 digits.\n';
+                        isValid = false;
+                    }
+
+                    // Specific check for CVC length
+                    if (cardCVC.length !== 3) {
+                        alertMessage += 'CVC must be 3 digits.\n';
+                        isValid = false;
+                    }
+
+                    // Check for a dummy email
+                    if (email === 'test@test.com') {
+                        alertMessage += 'Please use a real email address.\n';
+                        isValid = false;
+                    }
                 }
             }
 
-            // Validate PayPal Email
-            if (selectedPaymentMethod === 'PayPal' && !document.getElementById('paypal_email').value) {
-                alert('Please enter your PayPal email.');
-                isValid = false;
-            }
-
-            // If any validation failed, prevent form submission
+            // If any validation failed, show alert message and prevent form submission
             if (!isValid) {
+                alert(alertMessage);
                 e.preventDefault();
+            } else {
+                // Ask for a 4-digit code for confirmation
+                const code = prompt('Please enter the 4-digit confirmation code sent to your email:');
+                if (code.length !== 4) {
+                    alert('Invalid code. Please enter the correct 4-digit code.');
+                    e.preventDefault();
+                } else {
+                    alert('Payment Confirmed.');
+                }
             }
         });
 
@@ -241,8 +256,6 @@ $conn->close();
         document.querySelectorAll('input[name="payment_method"]').forEach(input => {
             input.addEventListener('change', function () {
                 document.getElementById('credit_card_details').style.display = this.value === 'Credit Card' ? 'block' : 'none';
-                document.getElementById('paypal_details').style.display = this.value === 'PayPal' ? 'block' : 'none';
-                document.getElementById('afterpay_details').style.display = this.value === 'Afterpay' ? 'block' : 'none';
             });
         });
     </script>
