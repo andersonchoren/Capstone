@@ -5,7 +5,7 @@ require_once "connect.php";
 $daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 $timeSlots = ['08:00:00', '09:30:00', '11:00:00', '12:30:00', '14:00:00', '15:30:00'];
 $courseTypes = range(1, 5); // Assuming course types are 1-2
-$instructors = range(1, 3); // Assuming instructor IDs are 1-3
+$instructors = range(1, 2); // Assuming instructor IDs are 1-3
 $branches = range(1, 2); // Assuming branch IDs are 1-2
 
 // Prepare the SQL statement
@@ -17,7 +17,7 @@ if (!$stmt) {
 }
 
 // Determine the date range
-$startDate = (new DateTime())->modify('+1 weeks');
+$startDate = (new DateTime())->modify('+2');
 $endDate = (new DateTime())->modify('+1 weeks');
 
 // Iterate over each day in the range

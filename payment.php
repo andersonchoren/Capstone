@@ -117,14 +117,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <?php
 $branchId = $_POST['branch'];
-$branchSql = "SELECT BranchName FROM Branches where BranchID = $branchId";
-$branchResult = $conn->query($branchSql);
-$arrayBranch = $branchResult->fetch_assoc();
+$branchSql = "SELECT BranchName FROM Branches WHERE BranchID = ?";
+$stmt = $conn->prepare($branchSql);
+$stmt->bind_param("i", $branchId);
+$stmt->execute();
+$arrayBranch = $stmt->get_result()->fetch_assoc();
+$stmt->close();
 
 $vehicleId = $_POST['vehicle'];
-$vehicleSql = "SELECT Model FROM fleet where VehicleID = $vehicleId";
-$vehicleResult = $conn->query($vehicleSql);
-$arrayVehicle = $vehicleResult->fetch_assoc();
+$vehicleSql = "SELECT Model FROM fleet WHERE VehicleID = ?";
+$stmt = $conn->prepare($vehicleSql);
+$stmt->bind_param("i", $vehicleId);
+$stmt->execute();
+$arrayVehicle = $stmt->get_result()->fetch_assoc();
+$stmt->close();
+
+$courseId = $_POST['course'];
+$courseSql = "SELECT CourseName, Price FROM courses WHERE CourseID = ?";
+$stmt = $conn->prepare($courseSql);
+$stmt->bind_param("i", $courseId);
+$stmt->execute();
+$arrayCourse = $stmt->get_result()->fetch_assoc();
+$stmt->close();
 
 // Close the connection
 $conn->close();
@@ -133,13 +147,17 @@ $conn->close();
     <thead>
     <tr>
         <th>Branch</th>
-        <th>Vehicle model</th>
+        <th>Vehicle Model</th>
+        <th>Course Name</th> <!-- Added Course Name header -->
+        <th>Course Price</th>
     </tr>
     </thead>
     <tbody>
     <tr>
-        <td><?= $arrayBranch['BranchName'] ?></td>
-        <td><?= $arrayVehicle['Model'] ?></td>
+        <td><?= htmlspecialchars($arrayBranch['BranchName']) ?></td>
+        <td><?= htmlspecialchars($arrayVehicle['Model']) ?></td>
+        <td><?= htmlspecialchars($arrayCourse['CourseName']) ?></td> <!-- Displaying Course Name -->
+        <td><?= htmlspecialchars($arrayCourse['Price']) ?></td>
     </tr>
     </tbody>
 </table>
