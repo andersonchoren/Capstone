@@ -49,6 +49,7 @@ $result = $conn->query($sql);
         <li><a href="logout.php">Logout</a></li>
     </ul>
 </nav>
+<li><a href="Notification_Management.php">Notification Management</a></li>
 <div id="bookings" class="dashboard-section">
     <h2>Students Bookings</h2>
     <?php
@@ -65,7 +66,7 @@ $result = $conn->query($sql);
         <th>Payment Status</th>
         <th>Booking Accept</th>
         <th>Actions</th>
-        <th>Send Reminder</th>
+        <th>Send Notification</th>
         <th>Cancel Booking</th>  <!-- Add this line -->
       </tr>";
 
@@ -81,7 +82,7 @@ $result = $conn->query($sql);
             echo "<td>" . htmlspecialchars($row["Status"]). "</td>";
             echo "<td>" . ($row["PaymentConfirmed"] ? 'Yes' : 'No') . "</td>";
             echo "<td><a href='booking_edit.php?bookingId=" . $row["BookingID"] . "'>Edit</a></td>";
-            echo "<td><a href='send_reminder.php?bookingId=" . $row["BookingID"] . "&studentId=" . $row["StudentID"] . "'>Send Reminder</a></td>";
+            echo "<td><a href='notification_management.php?bookingId=" . $row["BookingID"] . "&studentId=" . $row["StudentID"] . "'>Send Notification</a></td>";
             echo "<td><a href='cancel_booking.php?bookingId=" . $row["BookingID"] . "' onclick='return confirm(\"Are you sure you want to cancel this booking?\");'>Cancel</a></td>"; // Add this line
             echo "</tr>";
         }

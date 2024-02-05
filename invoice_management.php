@@ -18,6 +18,7 @@ if (isset($_SESSION['message'])) {
 $sql = "SELECT * FROM Invoices";
 $result = $conn->query($sql);
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -60,7 +61,6 @@ $result = $conn->query($sql);
                 echo "<td>" . $row["InvoiceID"] . "</td>";
                 echo "<td>" . $row["StudentID"] . "</td>";
                 echo "<td>" . $row["AmountDue"] . "</td>";
-
                 echo "<td>" . $row["DueDate"] . "</td>";
                 echo "<td>" . $row["Status"] . "</td>";
                 echo "<td><a href='edit_invoice.php?invoiceId=" . $row["InvoiceID"] . "'>Edit</a> | <a href='delete_invoice.php?invoiceId=" . $row["InvoiceID"] . "' onclick='return confirm(\"Are you sure?\");'>Delete</a></td>";
