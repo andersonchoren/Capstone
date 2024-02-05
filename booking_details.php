@@ -5,8 +5,8 @@ require_once "connect.php";
 $bookings = [];
 $error_message = "";
 
-if (isset($_SESSION['user_id'])) { // Ensure the user is logged in
-    $studentId = $_SESSION['user_id'];
+if (isset($_SESSION['Studentid'])) { // Ensure the user is logged in
+    $studentId = $_SESSION['Studentid'];
 
     // SQL to fetch all bookings for the logged-in student, joining with the students table to get the student's name
     $sql = "SELECT b.BookingID, b.StudentID, s.firstname as StudentFirstName,i.FirstName as InstructorFirstName,br.BranchName,f.Model,c.CourseName,cs.ClassDate,cs.StartTime, b.BookingDate, b.Status, b.PaymentConfirmed
