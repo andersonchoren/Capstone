@@ -65,7 +65,7 @@ if (isset($_SESSION['userId']) && !is_array($_SESSION['userId'])) {  // Change '
         <img src="image/logo..JPEG" alt="Excel Driving School Logo" style="width:15%; height: auto;">
         <h1>Excel Driving School - Student Notifications</h1>
     </div>
-    <p>Welcome, <?php echo htmlspecialchars($_SESSION['username']); ?>! (Student)</p>
+    <p>Welcome, <?php echo htmlspecialchars($_SESSION['Studentid']); ?>! (Student)</p>
 </header>
 <nav>
     <ul>

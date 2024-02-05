@@ -8,7 +8,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     try {
         // Retrieve form data
-        $studentId = $_SESSION['user_id']; // Assuming the student's ID is stored in the session
+        $studentId = $_SESSION['Studentid']; // Assuming the student's ID is stored in the session
         $branchId = $_POST['branch'];
         $vehicleId = $_POST['vehicle'];
         $courseId = $_POST['course'];
