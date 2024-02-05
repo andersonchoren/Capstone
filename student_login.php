@@ -16,8 +16,9 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
     if ($row = $result->fetch_assoc()) {
         if (password_verify($password, $row['Password'])) {
             // Login successful, set session variables
-            $_SESSION['user_id'] = $row['StudentID'];
+            $_SESSION['Studentid'] = $row['StudentID'];
             $_SESSION['Username'] = $row['Username'];
+            $_SESSION['Role'] = "Student";
 
             // Redirect to another page
             header("Location: student-area.html"); // Replace 'dashboard.php' with the actual page

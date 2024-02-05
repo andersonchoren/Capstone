@@ -7,17 +7,16 @@ require_once "connect.php";
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
-if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'student') {
-    header('Location: student_login.php'); // Redirect to login page
+if (!isset($_SESSION['Username']) && $_SESSION['Role'] !== 'Student') {
+    header('Location: students-login.html'); // Redirect to login page
     exit();
 }
-
 // Initialize $notifications to avoid "Undefined variable" warning
 $notifications = array();
 
 // Check if StudentID is set in the session
 if (isset($_SESSION['userId']) && !is_array($_SESSION['userId'])) {  // Change 'StudentID' to 'userId' to match your session variable
-    $studentId = $_SESSION['userId'];  // Adjust the session variable key as per your login script
+    $studentId = $_SESSION['Studentid'];  // Adjust the session variable key as per your login script
     $sql = "SELECT NotificationID, Type, Message, DateCreated, IsRead 
             FROM Notifications 
             WHERE StudentID = ? 
@@ -48,10 +47,6 @@ if (isset($_SESSION['userId']) && !is_array($_SESSION['userId'])) {  // Change '
     echo '</pre>';
 }
 
-// Debugging line to see the output (remove in production)
-echo '<pre>';
-var_dump($notifications);
-echo '</pre>';
 ?>
 
 
@@ -73,7 +68,6 @@ echo '</pre>';
     <p>Welcome, <?php echo htmlspecialchars($_SESSION['username']); ?>! (Student)</p>
 </header>
 <!-- ... existing navigation and other content ... -->
-
 <div class="container">
     <h2>Your Notifications</h2>
     <?php if (count($notifications) > 0): ?>
