@@ -2,11 +2,12 @@
 require_once "connect.php";
 
 // Days, instructors, branches, and time slots
-$daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-$timeSlots = ['08:00:00', '09:30:00', '11:00:00', '12:30:00', '14:00:00', '15:30:00'];
-$courseTypes = range(1, 5); // Assuming course types are 1-2
-$instructors = range(1, 2); // Assuming instructor IDs are 1-3
-$branches = range(1, 2); // Assuming branch IDs are 1-2
+$daysOfWeek = ['Monday', 'Wednesday', 'Friday']; // Onl
+$timeSlots = ['09:30:00', '14:00:00']; // Reduced time slots
+$courseTypes = range(1, 5); // Assuming you want fewer course types
+$instructors = [1,7]; // Assuming you only want schedules for 1 instructor
+// Similar changes can be made to $branches// Assuming instructor IDs are 1-3
+$branches = range(1, 4); // Assuming branch IDs are 1-2
 
 // Prepare the SQL statement
 $sql = "INSERT INTO ClassSchedules (CourseID, InstructorID, BranchID, Day, StartTime, EndTime, ClassDate) VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -18,7 +19,7 @@ if (!$stmt) {
 
 // Determine the date range
 $startDate = (new DateTime())->modify('+2');
-$endDate = (new DateTime())->modify('+1 weeks');
+$endDate = (new DateTime())->modify('+3 days'); // Reduced from '+1 weeks'
 
 // Iterate over each day in the range
 for ($date = clone $startDate; $date <= $endDate; $date->modify('+1 day')) {
@@ -30,12 +31,14 @@ for ($date = clone $startDate; $date <= $endDate; $date->modify('+1 day')) {
             foreach ($courseTypes as $courseType) {
                 foreach ($instructors as $instructor) {
                     foreach ($branches as $branch) {
-                        // Bind parameters and execute the statement for each schedule
-                        $stmt->bind_param("iiissss", $courseType, $instructor, $branch, $dayOfWeek, $startTime, $endTime, $dayFormatted);
-                        if ($stmt->execute()) {
-                            echo "New record created successfully for " . $dayFormatted . " " . $dayOfWeek . "\n";
-                        } else {
-                            echo "Error: " . $stmt->error . "\n";
+                        if (rand(0, 1)) { // 50% chance to create a schedule for this combination
+                            // Bind parameters and execute the statement for each schedule
+                            $stmt->bind_param("iiissss", $courseType, $instructor, $branch, $dayOfWeek, $startTime, $endTime, $dayFormatted);
+                            if ($stmt->execute()) {
+                                echo "New record created successfully for " . $dayFormatted . " " . $dayOfWeek . "\n";
+                            } else {
+                                echo "Error: " . $stmt->error . "\n";
+                            }
                         }
                     }
                 }

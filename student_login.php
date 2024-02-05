@@ -14,7 +14,7 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
     $result = $stmt->get_result();
 
     if ($row = $result->fetch_assoc()) {
-                if (password_verify($password, $row['Password'])) {
+        if (password_verify($password, $row['Password'])) {
             // Login successful, set session variables
             $_SESSION['user_id'] = $row['StudentID'];
             $_SESSION['Username'] = $row['Username'];
@@ -24,9 +24,9 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
             exit;
         } else {
             // Invalid password
-                    $_SESSION['error_message'] = "Invalid password. Please try again.";
-                    header("Location: student_login.php");
-                }
+            $_SESSION['error_message'] = "Invalid password. Please try again.";
+            header("Location: student_login.php");
+        }
     } else {
         // Username not found
         echo "Invalid username";

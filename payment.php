@@ -14,7 +14,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $courseId = $_POST['course'];
         $scheduleId = $_POST['schedule'];
         $instructorId = $_POST['instructor'];
+// Check availability
+        $checkSql = "SELECT COUNT(*) FROM Bookings 
+                     WHERE ScheduleID = ? AND (VehicleID = ? OR InstructorID = ?)";
+        $stmtCheck = $conn->prepare($checkSql);
+        $stmtCheck->bind_param("iii", $scheduleId, $vehicleId, $instructorId);
+        $stmtCheck->execute();
+        $stmtCheck->bind_result($bookingExists);
+        $stmtCheck->fetch();
+        $stmtCheck->close();
 
+        if ($bookingExists > 0) {
+            // If a booking exists, throw an exception
+            throw new Exception("This slot is already booked. Please select another.");
+        }
         // Fetch the price of the selected course
         $sqlPrice = "SELECT Price FROM Courses WHERE CourseID = ?";
         $stmtPrice = $conn->prepare($sqlPrice);
@@ -192,72 +205,72 @@ $conn->close();
     <button type="submit" name="submit_payment">Pay Now</button>
 </form>
 
-    <footer>
-        <p> 2024 Excel Driving School. All rights reserved. <a href="mailto:services@exceldriving.com">exceldriving@syd.com.au</a>
-        </p>
-    </footer>
+<footer>
+    <p> 2024 Excel Driving School. All rights reserved. <a href="mailto:services@exceldriving.com">exceldriving@syd.com.au</a>
+    </p>
+</footer>
 
-    <script>
-        // JavaScript to handle display and validation of payment method details
-        document.getElementById('payment-form').addEventListener('submit', function (e) {
-            const selectedPaymentMethod = document.querySelector('input[name="payment_method"]:checked').value;
-            let isValid = true;
-            let alertMessage = '';
+<script>
+    // JavaScript to handle display and validation of payment method details
+    document.getElementById('payment-form').addEventListener('submit', function (e) {
+        const selectedPaymentMethod = document.querySelector('input[name="payment_method"]:checked').value;
+        let isValid = true;
+        let alertMessage = '';
 
-            // Validate Credit Card Details
-            if (selectedPaymentMethod === 'Credit Card') {
-                const cardNumber = document.getElementById('card-number').value;
-                const cardExpirationDate = document.getElementById('card-expiration-date').value;
-                const cardCVC = document.getElementById('card-cvc').value;
-                const email = document.getElementById('email').value;
+        // Validate Credit Card Details
+        if (selectedPaymentMethod === 'Credit Card') {
+            const cardNumber = document.getElementById('card-number').value;
+            const cardExpirationDate = document.getElementById('card-expiration-date').value;
+            const cardCVC = document.getElementById('card-cvc').value;
+            const email = document.getElementById('email').value;
 
-                // Basic checks for empty fields
-                if (!cardNumber || !cardExpirationDate || !cardCVC || !email) {
-                    alertMessage = 'Please fill out all fields.';
+            // Basic checks for empty fields
+            if (!cardNumber || !cardExpirationDate || !cardCVC || !email) {
+                alertMessage = 'Please fill out all fields.';
+                isValid = false;
+            } else {
+                // Specific check for card number length
+                if (cardNumber.length !== 16) {
+                    alertMessage += 'Card number must be 16 digits.\n';
                     isValid = false;
-                } else {
-                    // Specific check for card number length
-                    if (cardNumber.length !== 16) {
-                        alertMessage += 'Card number must be 16 digits.\n';
-                        isValid = false;
-                    }
+                }
 
-                    // Specific check for CVC length
-                    if (cardCVC.length !== 3) {
-                        alertMessage += 'CVC must be 3 digits.\n';
-                        isValid = false;
-                    }
+                // Specific check for CVC length
+                if (cardCVC.length !== 3) {
+                    alertMessage += 'CVC must be 3 digits.\n';
+                    isValid = false;
+                }
 
-                    // Check for a dummy email
-                    if (email === 'test@test.com') {
-                        alertMessage += 'Please use a real email address.\n';
-                        isValid = false;
-                    }
+                // Check for a dummy email
+                if (email === 'test@test.com') {
+                    alertMessage += 'Please use a real email address.\n';
+                    isValid = false;
                 }
             }
+        }
 
-            // If any validation failed, show alert message and prevent form submission
-            if (!isValid) {
-                alert(alertMessage);
+        // If any validation failed, show alert message and prevent form submission
+        if (!isValid) {
+            alert(alertMessage);
+            e.preventDefault();
+        } else {
+            // Ask for a 4-digit code for confirmation
+            const code = prompt('Please enter the 4-digit confirmation code sent to your email:');
+            if (code.length !== 4) {
+                alert('Invalid code. Please enter the correct 4-digit code.');
                 e.preventDefault();
             } else {
-                // Ask for a 4-digit code for confirmation
-                const code = prompt('Please enter the 4-digit confirmation code sent to your email:');
-                if (code.length !== 4) {
-                    alert('Invalid code. Please enter the correct 4-digit code.');
-                    e.preventDefault();
-                } else {
-                    alert('Payment Confirmed.');
-                }
+                alert('Payment Confirmed.');
             }
-        });
+        }
+    });
 
-        // Handle display of payment method details
-        document.querySelectorAll('input[name="payment_method"]').forEach(input => {
-            input.addEventListener('change', function () {
-                document.getElementById('credit_card_details').style.display = this.value === 'Credit Card' ? 'block' : 'none';
-            });
+    // Handle display of payment method details
+    document.querySelectorAll('input[name="payment_method"]').forEach(input => {
+        input.addEventListener('change', function () {
+            document.getElementById('credit_card_details').style.display = this.value === 'Credit Card' ? 'block' : 'none';
         });
-    </script>
+    });
+</script>
 
 </body>

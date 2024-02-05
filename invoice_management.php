@@ -38,7 +38,7 @@ $result = $conn->query($sql);
 <nav>
     <ul>
         <li><a href="invoice_management.php">Invoice Management</a></li>
-        <li><a href="javascript:if (window.history.length > 1) { window.history.back(); } else { window.location.href = 'index.html'; }">Back to Previous Page</a></li>
+        <li><a href="javascript:if (window.history.length > 1) { window.history.back(); } else { window.location.href = 'staff_dashboard.php'; }">Back to Previous Page</a></li>
         <li><a href="logout.php">Logout</a></li>
 
     </ul>
@@ -90,7 +90,7 @@ $result = $conn->query($sql);
         <input type="submit" value="Add Invoice">
     </form>
 </main>
-<footer style="background-color:red; padding: 20px 0; text-align: center;">
+<footer style="background-color:#8b8686; padding: 20px 0; text-align: center;">
     <div style="max-width: 800px; margin: 0 auto;">
         <h3 style="color: black;">Contact Us</h3>
         <address style="font-style: normal; margin-bottom: 10px;">

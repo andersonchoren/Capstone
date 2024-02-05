@@ -18,6 +18,10 @@ if (!isset($_SESSION['user_id']) && !isset($_SESSION['Username'])) {
     header("Location: student_login.php"); // Redirect to the login page
     exit;
 }
+
+// TODO: Ensure that $selectedScheduleId is set based on user selection or logic
+$selectedScheduleId = isset($_POST['schedule']) ? $_POST['schedule'] : 0;
+
 ?>
 
 <header>
@@ -27,7 +31,11 @@ if (!isset($_SESSION['user_id']) && !isset($_SESSION['Username'])) {
     </div>
     <p>Your Journey Begins Here</p>
 </header>
-
+<nav>
+    <ul>
+        <li><a href="javascript:if (window.history.length > 1) { window.history.back(); } else { window.location.href = 'index.html'; }">Back to Previous Page</a></li>
+    </ul>
+</nav>
 <nav>
     <ul>
         <li>Make Your Enrollment and Pay Here</li>
@@ -58,8 +66,18 @@ if (!isset($_SESSION['user_id']) && !isset($_SESSION['Username'])) {
         <label for="vehicle">Select Vehicle:</label>
         <select id="vehicle" name="vehicle">
             <?php
-            $vehicleSql = "SELECT VehicleID, VehicleType , Model FROM Fleet";
-            $vehicleResult = $conn->query($vehicleSql);
+            $vehicleSql = "
+                SELECT v.VehicleID, v.VehicleType, v.Model
+                FROM Fleet v
+                LEFT JOIN Bookings b ON v.VehicleID = b.VehicleID AND b.ScheduleID = ?
+                WHERE b.VehicleID IS NULL;
+            ";
+
+            $stmt = $conn->prepare($vehicleSql);
+            $stmt->bind_param("i", $selectedScheduleId);
+            $stmt->execute();
+            $vehicleResult = $stmt->get_result();
+
             if ($vehicleResult && $vehicleResult->num_rows > 0) {
                 while ($row = $vehicleResult->fetch_assoc()) {
                     echo "<option value='" . $row["VehicleID"] . "'>" . htmlspecialchars($row["Model"]) ."-" .htmlspecialchars($row["VehicleType"])."</option>";
@@ -125,10 +143,34 @@ if (!isset($_SESSION['user_id']) && !isset($_SESSION['Username'])) {
     </form>
 </section>
 
-<footer>
-    <p>&copy; 2024 Excel Driving School. All rights reserved.
-        <a href="mailto:services@exceldriving.com">exceldriving@syd.com.au</a>
-    </p>
+<footer style="background-color:#383737; padding: 20px 0; text-align: center;">
+    <div style="max-width: 400px; margin: 0 auto;">
+
+        <h3 style="color: black;">Contact Us</h3>
+
+        <address style="font-style: normal; margin-bottom: 10px;">
+            123 Main Street<br>
+            Melbourne, VIC 3000
+        </address>
+
+        <ul style="list-style: none; padding: 0; margin: 0;">
+            <li style="margin-bottom: 10px;">Customer Service: (555) 123-4567</li>
+            <li style="margin-bottom: 10px;">Appointment Booking: (555) 987-6543</li>
+            <li style="margin-bottom: 10px;">Email: <a href="mailto:info@exceldrivingschool.com" style="color: #007BFF; text-decoration: none;">info@exceldrivingschool.com</a></li>
+        </ul>
+
+        <p style="color:black; margin-bottom: 10px;">Office Hours:</p>
+        <p>Monday - Friday: 9:00 AM - 6:00 PM<br>
+            Saturday: 10:00 AM - 4:00 PM<br>
+            Closed on Sundays</p>
+
+        <div class="social-icons" style="margin-top: 20px;">
+            <a href="#" style="margin: 0 10px; color:black; text-decoration: none;" target="_blank">Facebook</a>
+            <a href="#" style="margin: 0 10px; color:black; text-decoration: none;" target="_blank">Twitter</a>
+            <a href="#" style="margin: 0 10px; color:black; text-decoration: none;" target="_blank">Instagram</a>
+        </div>
+
+    </div>
 </footer>
 
 </body>

@@ -4,7 +4,7 @@ require_once "connect.php";
 session_start();
 
 if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'staff') {
-    header('Location: login.php'); // Redirect to login page
+    header('Location: student_login.php'); // Redirect to login page
     exit();
 }
 
