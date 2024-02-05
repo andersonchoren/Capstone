@@ -634,27 +634,42 @@ th, td {
 }
 
 /* More styles as needed */
-.table-responsive {
-    display: block;
-    width: 100%;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
+th {
+    background-color: #38761d; /* Darker green */
+    color: white;
+    font-size: 1.1em; /* Slightly larger font size */
+    font-weight: bold; /* Make the font bold */
+    padding: 15px; /* Add more padding */
 }
-
+th {
+    background-color: #4CAF50;
+    color: white;
+    text-shadow: 0px 1px 1px #000;
+}
 table {
-    width: 100%;
-    max-width: 100%;
-    margin-bottom: 1rem;
-    background-color: transparent;
+    border-collapse: separate;
+    border-spacing: 0;
+    box-shadow: 0 2px 3px #ccc;
 }
 
 th, td {
-    padding: 0.75rem;
-    vertical-align: top;
-    border-top: 1px solid #dee2e6;
+    border-right: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+}
+
+th:first-child, td:first-child {
+    border-left: 1px solid #ddd;
 }
 
 th {
-    vertical-align: bottom;
-    border-bottom: 2px solid #dee2e6;
+    background-color: #4CAF50;
+    color: white;
+    padding: 15px;
+}
+th {
+    background-color: #4CAF50;
+    color: white;
+    font-family: Arial, sans-serif; /* or any other font-family */
+    font-size: 20px; /* adjust as needed */
+    padding: 10px; /* adjust as needed */
 }

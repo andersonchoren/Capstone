@@ -67,31 +67,42 @@ if (isset($_SESSION['userId']) && !is_array($_SESSION['userId'])) {  // Change '
     </div>
     <p>Welcome, <?php echo htmlspecialchars($_SESSION['username']); ?>! (Student)</p>
 </header>
+<nav>
+    <ul>
+        <li><a href="javascript:if (window.history.length > 1) { window.history.back(); } else { window.location.href = 'index.html'; }">Back to Previous Page</a></li>
+    </ul>
+</nav>
 <!-- ... existing navigation and other content ... -->
 <div class="container">
     <h2>Your Notifications</h2>
-    <?php if (count($notifications) > 0): ?>
-        <table>
-            <tr>
-                <th>Type</th>
-                <th>Message</th>
-                <th>Date</th>
-                <th>Status</th>
-            </tr>
-            <?php foreach ($notifications as $notification): ?>
+    <div class="responsive-table">
+        <?php if (count($notifications) > 0): ?>
+            <table>
+                <thead>
                 <tr>
-                    <td><?php echo htmlspecialchars($notification['Type']); ?></td>
-                    <td><?php echo htmlspecialchars($notification['Message']); ?></td>
-                    <td><?php echo htmlspecialchars($notification['DateCreated']); ?></td>
-                    <td><?php echo $notification['IsRead'] ? 'Read' : 'Unread'; ?></td>
+                    <th>Type</th>
+                    <th>Message</th>
+                    <th>Date</th>
+                    <th>Status</th>
                 </tr>
-            <?php endforeach; ?>
-        </table>
-    <?php else: ?>
-        <p>You have no notifications.</p>
-    <?php endif; ?>
+                </thead>
+                <tbody>
+                <?php foreach ($notifications as $notification): ?>
+                    <tr>
+                        <td><?php echo htmlspecialchars($notification['Type']); ?></td>
+                        <td><?php echo htmlspecialchars($notification['Message']); ?></td>
+                        <td><?php echo htmlspecialchars($notification['DateCreated']); ?></td>
+                        <td><?php echo $notification['IsRead'] ? 'Read' : 'Unread'; ?></td>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+        <?php else: ?>
+            <p>You have no notifications.</p>
+        <?php endif; ?>
+    </div>
 </div>
-<footer style="background-color:#383737; padding: 20px 0; text-align: center;">
+<footer style="background-color:#8b8686; padding: 20px 0; text-align: center;">
     <div style="max-width: 400px; margin: 0 auto;">
 
         <h3 style="color: black;">Contact Us</h3>
