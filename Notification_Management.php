@@ -8,10 +8,11 @@ if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'staff') {
     exit();
 }
 
+$instructorId = $_SESSION['userId']; // Assuming instructor's user ID is in the session
+
 // Handle notification form submission
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $studentId = $_POST['studentId'];
-    $instructorId = $_SESSION['userId']; // Assuming instructor's user ID is in the session
     $type = 'Reminder'; // or any other type you want to set
     $message = $_POST['message'];
     $dateCreated = date('Y-m-d H:i:s');
@@ -34,6 +35,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
+// Fetch notifications with read status
+$notifications = [];
+$sql = "SELECT n.NotificationID, n.StudentID, n.Type, n.Message, n.DateCreated, n.IsRead 
+        FROM Notifications n
+        WHERE n.InstructorID = ?
+        ORDER BY n.DateCreated DESC";
+
+if ($stmt = $conn->prepare($sql)) {
+    $stmt->bind_param("i", $instructorId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    while ($row = $result->fetch_assoc()) {
+        $notifications[] = $row;
+    }
+    $stmt->close();
+} else {
+    $_SESSION['message'] = "Error: " . $conn->error;
+}
+$conn->close();
 ?>
 
 <!DOCTYPE html>
@@ -80,6 +100,35 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <button type="submit">Send Notification</button>
         </div>
     </form>
+</div>
+<div id="notification-list" class="dashboard-section">
+    <h2>Sent Notifications</h2>
+    <div class="responsive-table">
+        <?php if (count($notifications) > 0): ?>
+            <table>
+                <thead>
+                <tr>
+                    <th>Type</th>
+                    <th>Message</th>
+                    <th>Date Sent</th>
+                    <th>Status</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php foreach ($notifications as $notification): ?>
+                    <tr>
+                        <td><?php echo htmlspecialchars($notification['Type']); ?></td>
+                        <td><?php echo htmlspecialchars($notification['Message']); ?></td>
+                        <td><?php echo htmlspecialchars($notification['DateCreated']); ?></td>
+                        <td><?php echo $notification['IsRead'] ? 'Read' : 'Unread'; ?></td>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+        <?php else: ?>
+            <p>No notifications sent.</p>
+        <?php endif; ?>
+    </div>
 </div>
 
 <footer style="background-color:#494747; padding: 20px 0; text-align: center;">

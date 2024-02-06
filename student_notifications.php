@@ -84,6 +84,7 @@ if (isset($_SESSION['userId']) && !is_array($_SESSION['userId'])) {  // Change '
                     <th>Message</th>
                     <th>Date</th>
                     <th>Status</th>
+                    <th>Action</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -93,6 +94,16 @@ if (isset($_SESSION['userId']) && !is_array($_SESSION['userId'])) {  // Change '
                         <td><?php echo htmlspecialchars($notification['Message']); ?></td>
                         <td><?php echo htmlspecialchars($notification['DateCreated']); ?></td>
                         <td><?php echo $notification['IsRead'] ? 'Read' : 'Unread'; ?></td>
+                        <td>
+                            <?php if (!$notification['IsRead']): ?>
+                                <form action="mark-read.php" method="post">
+                                    <input type="hidden" name="notificationId" value="<?php echo $notification['NotificationID']; ?>">
+                                    <button type="submit">Mark as Read</button>
+                                </form>
+                            <?php else: ?>
+                                <span>Read</span>
+                            <?php endif; ?>
+                        </td>
                     </tr>
                 <?php endforeach; ?>
                 </tbody>
